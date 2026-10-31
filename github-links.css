@@ -1,0 +1,48 @@
+.github-source-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.github-source-link:hover {
+  color: var(--accent, #c5daac);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.github-source-link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+.header-actions > .github-source-link,
+.dossier-actions > .github-source-link {
+  font-size: 12px;
+}
+
+.github-project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--accent, #c5daac);
+}
+
+@media (max-width: 800px) {
+  .footer-identity > [data-github] {
+    display: inline-flex;
+    margin-left: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .header-actions { gap: 12px; }
+  .dossier-actions { gap: 12px; }
+  .header-actions > .github-source-link,
+  .dossier-actions > .github-source-link { font-size: 11px; }
+}

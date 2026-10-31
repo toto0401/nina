@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#17171d" />
+    <meta name="description" content="一个纯前端的评论区人格测试小游戏。" />
+    <title>评论区人格测试</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app-shell" id="app" aria-live="polite">
+      <header class="topbar">
+        <button class="brand" type="button" data-action="home" aria-label="回到首页">
+          <span class="brand-mark" aria-hidden="true">评</span>
+          <span>评论区人格测试</span>
+        </button>
+        <div class="topbar-actions">
+          <button class="icon-button" type="button" data-action="toggle-theme" aria-label="切换颜色主题" title="切换颜色主题">
+            <span aria-hidden="true">明</span>
+          </button>
+          <button class="icon-button" type="button" data-action="toggle-sound" aria-label="关闭音效" title="关闭音效">
+            <span data-sound-label aria-hidden="true">声</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="view is-active" id="home-view" aria-labelledby="home-title">
+        <div class="hero-layout">
+          <div class="hero-copy">
+            <p class="eyebrow">今天适合在哪条评论区出没？</p>
+            <h1 id="home-title">你以为你在回帖，<br />评论区早就记住你了。</h1>
+            <p class="hero-intro">从 24 条日常帖子里抽 12 条，测出你的评论区人格，顺手带走一张分享卡。</p>
+            <div class="hero-actions">
+              <button class="button button-primary" type="button" data-action="start" data-start-label>开始测试</button>
+              <button class="button button-secondary" type="button" data-action="collection">查看藏品墙</button>
+            </div>
+            <p class="helper-text">约 3 分钟，结果仅供娱乐。</p>
+          </div>
+
+          <div class="hero-feed" aria-label="评论区预览">
+            <div class="feed-status"><span>正在刷帖</span><span>12 道题</span></div>
+            <article class="mini-post mini-post-main">
+              <div class="post-head">
+                <div class="avatar avatar-coral">酸奶加两勺糖</div>
+                <div><strong>酸奶加两勺糖</strong><span>刚刚</span></div>
+              </div>
+              <p>老板说这个方案挺好，明早简单改一下。</p>
+              <div class="post-meta"><span>赞 2.4k</span><span>评 318</span><span>藏 77</span></div>
+            </article>
+            <div class="floating-reply reply-one">简单，是老板对复杂一无所知。</div>
+            <div class="floating-reply reply-two">先睡，明早的脑子比较贵。</div>
+            <div class="feed-caption">点击一句回复，解锁你的评论区生存方式。</div>
+          </div>
+        </div>
+
+        <section class="home-collection" aria-label="我的收藏进度">
+          <div class="collection-stat"><span data-persona-count>0</span><small>人格徽章</small></div>
+          <div class="collection-stat"><span data-achievement-count>0</span><small>隐藏成就</small></div>
+          <div class="collection-stat"><span data-test-count>0</span><small>完成测试</small></div>
+        </section>
+      </section>
+
+      <section class="view" id="quiz-view" aria-labelledby="quiz-title" hidden>
+        <div class="quiz-topline">
+          <button class="text-button" type="button" data-action="quit-quiz">退出</button>
+          <p id="quiz-title"><span data-current-question>1</span> / 12</p>
+          <span class="category-label" data-category-label>日常</span>
+        </div>
+        <div class="quiz-progress" aria-label="答题进度"><span data-progress-fill></span></div>
+        <div class="quiz-layout">
+          <aside class="quiz-aside" aria-hidden="true">
+            <p>评论区<br /><strong>请发言</strong></p>
+            <div class="aside-number" data-current-question-aside>01</div>
+          </aside>
+          <div class="quiz-content">
+            <article class="post-card" data-post-card>
+              <header class="post-head">
+                <div class="avatar" data-post-avatar>泡芙不泡水</div>
+                <div>
+                  <strong data-post-author>泡芙不泡水</strong>
+                  <span data-post-time>2 分钟前</span>
+                </div>
+                <button class="more-button" type="button" aria-label="更多帖子选项">•••</button>
+              </header>
+              <p class="post-body" data-post-body></p>
+              <footer class="post-meta" data-post-meta></footer>
+            </article>
+            <div class="reply-intro"><span>如果刷到这条，你会怎么回？</span><kbd>1-4</kbd></div>
+            <div class="options" data-options role="group" aria-label="选择你的评论回复"></div>
+            <p class="keyboard-help">也可以按键盘数字 1 到 4 选择。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="result-view" aria-labelledby="result-title" hidden>
+        <div class="result-layout">
+          <div class="result-copy">
+            <p class="eyebrow">评论区人格报告</p>
+            <h1 id="result-title" data-result-title>阴阳文学家</h1>
+            <p class="result-tagline" data-result-tagline></p>
+            <div class="result-details">
+              <div><span>隐藏副人格</span><strong data-result-secondary></strong></div>
+              <div><span>互联网年龄</span><strong data-result-age></strong></div>
+              <div><span>常驻评论区</span><strong data-result-haunts></strong></div>
+            </div>
+            <blockquote data-result-description></blockquote>
+            <div class="result-actions">
+              <button class="button button-primary" type="button" data-action="share-card" data-share-button>生成分享卡片</button>
+              <button class="button button-secondary" type="button" data-action="restart">再测一次</button>
+              <button class="text-button" type="button" data-action="collection">查看藏品墙</button>
+            </div>
+            <p class="helper-text" data-share-note>图片会保存到你的设备。</p>
+          </div>
+          <article class="personality-card" data-result-card>
+            <div class="card-topline"><span>你的评论区通行证</span><span data-result-age-card>25 岁</span></div>
+            <div class="persona-seal" data-result-seal>言</div>
+            <p class="card-label">主人格</p>
+            <h2 data-result-title-card>阴阳文学家</h2>
+            <p data-result-sample></p>
+            <footer><span>评论区人格测试</span><span>仅供娱乐</span></footer>
+          </article>
+        </div>
+        <section class="unlocks-section" aria-labelledby="unlocks-title">
+          <div>
+            <p class="eyebrow">本局收获</p>
+            <h2 id="unlocks-title">新解锁的藏品</h2>
+          </div>
+          <div class="unlocks-list" data-new-unlocks></div>
+        </section>
+      </section>
+
+      <section class="view" id="collection-view" aria-labelledby="collection-title" hidden>
+        <div class="collection-header">
+          <div>
+            <p class="eyebrow">我的评论区藏品</p>
+            <h1 id="collection-title">收集每一种发言方式。</h1>
+            <p>人格会在你获得对应结果后解锁，隐藏成就则由你的答题习惯决定。</p>
+          </div>
+          <button class="button button-secondary" type="button" data-action="home">回到首页</button>
+        </div>
+        <div class="collection-overview" data-collection-overview></div>
+        <section class="collection-section" aria-labelledby="persona-wall-title">
+          <div class="section-heading"><h2 id="persona-wall-title">人格徽章</h2><span data-persona-count>0</span><span>/ 12</span></div>
+          <div class="badge-grid" data-persona-wall></div>
+        </section>
+        <section class="collection-section" aria-labelledby="achievement-wall-title">
+          <div class="section-heading"><h2 id="achievement-wall-title">隐藏成就</h2><span data-achievement-count>0</span><span>/ 8</span></div>
+          <div class="achievement-grid" data-achievement-wall></div>
+        </section>
+        <div class="collection-footer-actions">
+          <button class="text-button danger-button" type="button" data-action="clear-collection">清除我的收藏</button>
+        </div>
+      </section>
+    </main>
+
+    <div class="feedback-popover" data-feedback hidden role="status">
+      <span class="feedback-icon">赞</span>
+      <div><strong data-feedback-title>这句被顶上来了</strong><p data-feedback-text></p></div>
+    </div>
+    <div class="achievement-modal" data-achievement-modal hidden role="dialog" aria-modal="true" aria-labelledby="achievement-modal-title">
+      <div class="achievement-modal-panel">
+        <button class="modal-close" type="button" data-action="close-achievement" aria-label="关闭成就提示">×</button>
+        <p class="eyebrow">藏品已解锁</p>
+        <div class="modal-mark" data-achievement-mark>言</div>
+        <h2 id="achievement-modal-title" data-achievement-title></h2>
+        <p data-achievement-description></p>
+        <button class="button button-primary" type="button" data-action="close-achievement">收下</button>
+      </div>
+    </div>
+    <div class="detail-modal" data-detail-modal hidden role="dialog" aria-modal="true" aria-labelledby="detail-modal-title">
+      <div class="detail-modal-panel">
+        <button class="modal-close" type="button" data-action="close-detail" aria-label="关闭详情">×</button>
+        <div class="modal-mark" data-detail-mark>言</div>
+        <p class="eyebrow" data-detail-type>人格徽章</p>
+        <h2 id="detail-modal-title" data-detail-title></h2>
+        <p data-detail-description></p>
+      </div>
+    </div>
+    <div class="toast" data-toast hidden role="status"></div>
+    <script src="script.js"></script>
+  </body>
+</html>

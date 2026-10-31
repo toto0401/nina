@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#05070b">
+  <title>轨迹之城 · Neon Trace City</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #f4f7fb;
+      --muted: #8995a9;
+      --cyan: #57e6e6;
+      --cyan-soft: rgba(87, 230, 230, .16);
+      --pink: #f261a8;
+      --yellow: #f5d76e;
+      --night: #05070b;
+      --panel: rgba(7, 11, 18, .76);
+      --line: rgba(184, 208, 225, .16);
+      --radius: 12px;
+      font-family: "SF Pro Display", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--night); }
+    html { touch-action: manipulation; }
+    body { color: var(--ink); -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    [hidden] { display: none !important; }
+
+    #city-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      touch-action: none;
+      cursor: grab;
+      background: #05070b;
+    }
+    #city-canvas.is-drawing { cursor: grabbing; }
+
+    .screen {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: grid;
+      place-items: center;
+    }
+
+    .welcome {
+      padding: clamp(18px, 4vw, 54px);
+      background:
+        linear-gradient(90deg, rgba(5, 7, 11, .96) 0%, rgba(5, 7, 11, .82) 47%, rgba(5, 7, 11, .12) 100%);
+      place-items: stretch;
+      pointer-events: auto;
+    }
+
+    .welcome__content {
+      position: relative;
+      width: min(610px, 92vw);
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding-left: clamp(0px, 3vw, 46px);
+    }
+
+    .brand {
+      position: absolute;
+      top: 0;
+      left: clamp(0px, 3vw, 46px);
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      color: #bfccd9;
+      font: 600 11px/1.1 ui-monospace, "SFMono-Regular", Menlo, monospace;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    .brand::before {
+      content: "";
+      width: 31px;
+      height: 1px;
+      background: var(--cyan);
+      box-shadow: 0 0 12px var(--cyan);
+    }
+
+    .welcome h1 {
+      margin: 0;
+      font-size: clamp(58px, 8vw, 116px);
+      line-height: .84;
+      letter-spacing: -.07em;
+      font-weight: 780;
+    }
+
+    .welcome h1 span {
+      display: block;
+      margin-left: clamp(28px, 6vw, 86px);
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(244, 247, 251, .68);
+    }
+
+    .intro {
+      width: min(440px, 100%);
+      margin: 34px 0 26px;
+      color: #a8b4c4;
+      font-size: clamp(14px, 1.6vw, 17px);
+      line-height: 1.8;
+      letter-spacing: .02em;
+    }
+
+    .intro strong { color: var(--ink); font-weight: 600; }
+
+    .city-name-field {
+      width: min(360px, 100%);
+      display: grid;
+      gap: 7px;
+      margin: 0 0 14px;
+    }
+    .city-name-field label {
+      color: #718096;
+      font: 600 10px/1 ui-monospace, "SFMono-Regular", Menlo, monospace;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .city-name-field input {
+      width: 100%;
+      height: 42px;
+      padding: 0 12px;
+      border: 1px solid rgba(184,208,225,.18);
+      border-radius: 8px;
+      outline: 0;
+      color: var(--ink);
+      background: rgba(7,11,18,.68);
+      transition: border-color .16s ease, background .16s ease, box-shadow .16s ease;
+    }
+    .city-name-field input::placeholder { color: #5f6d80; }
+    .city-name-field input:focus { border-color: rgba(87,230,230,.62); background: rgba(7,15,23,.86); box-shadow: 0 0 0 3px rgba(87,230,230,.1); }
+
+    .primary, .secondary, .icon-button {
+      border: 0;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: transform .16s ease, background .16s ease, border-color .16s ease, opacity .16s ease;
+      white-space: nowrap;
+    }
+
+    .primary:active, .secondary:active, .icon-button:active { transform: scale(.98); }
+    .primary:focus-visible, .secondary:focus-visible, .icon-button:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+    }
+
+    .primary {
+      min-height: 52px;
+      padding: 0 24px;
+      background: var(--cyan);
+      color: #071012;
+      font-weight: 750;
+      letter-spacing: .04em;
+      box-shadow: 0 0 32px rgba(87, 230, 230, .22);
+    }
+
+    .primary:hover { background: #83f2ef; }
+    .primary .arrow { display: inline-block; margin-left: 28px; }
+
+    .secondary {
+      min-height: 46px;
+      padding: 0 18px;
+      color: #dce5ef;
+      background: rgba(255,255,255,.055);
+      border: 1px solid var(--line);
+    }
+
+    .secondary:hover { background: rgba(255,255,255,.1); border-color: rgba(184,208,225,.32); }
+
+    .instruction-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      margin-top: 26px;
+      color: #748196;
+      font: 500 11px/1.4 ui-monospace, "SFMono-Regular", Menlo, monospace;
+      letter-spacing: .06em;
+    }
+
+    .instruction-row span { display: inline-flex; align-items: center; gap: 7px; }
+    .instruction-row i { width: 5px; height: 5px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+
+    .recent {
+      margin-top: 26px;
+      width: min(470px, 100%);
+    }
+
+    .recent__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+
+    .recent__label {
+      color: #596679;
+      font: 600 10px/1 ui-monospace, "SFMono-Regular", Menlo, monospace;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .recent__clear {
+      padding: 2px 0;
+      border: 0;
+      color: #667386;
+      background: transparent;
+      cursor: pointer;
+      font-size: 10px;
+      letter-spacing: .08em;
+    }
+    .recent__clear:hover { color: var(--pink); }
+
+    .recent__list { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 5px; scrollbar-width: none; }
+    .recent__list::-webkit-scrollbar { display: none; }
+    .recent-city {
+      position: relative;
+      flex: 0 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: rgba(10,15,24,.7);
+      overflow: hidden;
+      transition: border-color .16s ease, background .16s ease;
+    }
+    .recent-city:hover { border-color: rgba(87,230,230,.42); background: rgba(12,22,30,.82); }
+    .recent-city__open {
+      min-height: 38px;
+      padding: 8px 34px 8px 12px;
+      border: 0;
+      color: #9eacbd;
+      background: transparent;
+      cursor: pointer;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+    .recent-city__open:hover { color: var(--cyan); }
+    .recent-city__delete {
+      position: absolute;
+      top: 50%;
+      right: 6px;
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      border: 0;
+      border-radius: 6px;
+      color: #657286;
+      background: transparent;
+      cursor: pointer;
+      font-size: 16px;
+      line-height: 1;
+      transform: translateY(-50%);
+    }
+    .recent-city__delete:hover { color: #ffd3e6; background: rgba(242,97,168,.13); }
+
+    .hud {
+      position: fixed;
+      z-index: 10;
+      top: max(14px, var(--safe-area-inset-top, env(safe-area-inset-top, 0px)));
+      left: 16px;
+      right: 16px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      pointer-events: none;
+    }
+
+    .hud__identity, .hud__cluster {
+      pointer-events: auto;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: 0 14px 40px rgba(0,0,0,.22);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .hud__identity {
+      min-width: 190px;
+      padding: 12px 14px 11px;
+      border-radius: var(--radius);
+    }
+
+    .hud__eyebrow {
+      color: #647286;
+      font: 600 9px/1 ui-monospace, "SFMono-Regular", Menlo, monospace;
+      letter-spacing: .17em;
+      text-transform: uppercase;
+    }
+
+    .hud__name { margin-top: 6px; font-size: 16px; font-weight: 680; letter-spacing: .05em; }
+
+    .hud__cluster { display: flex; align-items: stretch; border-radius: var(--radius); overflow: hidden; }
+    .metric { min-width: 74px; padding: 10px 14px; border-right: 1px solid var(--line); }
+    .metric__value { font: 600 17px/1 ui-monospace, "SFMono-Regular", Menlo, monospace; }
+    .metric__label { margin-top: 6px; color: #6f7d91; font-size: 9px; letter-spacing: .13em; }
+
+    .seal-button {
+      min-width: 84px;
+      padding: 0 18px;
+      border: 0;
+      border-radius: 0;
+      color: #061012;
+      background: var(--cyan);
+      cursor: pointer;
+      font-weight: 760;
+      letter-spacing: .08em;
+    }
+    .seal-button:hover { background: #83f2ef; }
+
+    .pause-button {
+      min-width: 76px;
+      padding: 0 15px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      border-radius: 0;
+      color: #c9d5e2;
+      background: rgba(255,255,255,.045);
+      cursor: pointer;
+      font-weight: 650;
+      letter-spacing: .06em;
+    }
+    .pause-button:hover { background: rgba(255,255,255,.09); }
+    .pause-button[aria-pressed="true"] { color: var(--yellow); background: rgba(245,215,110,.09); }
+    .history-button {
+      min-width: 62px;
+      padding: 0 12px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      border-radius: 0;
+      color: #aebdcd;
+      background: rgba(255,255,255,.035);
+      cursor: pointer;
+      font-weight: 620;
+      letter-spacing: .06em;
+    }
+    .history-button:hover { color: var(--cyan); background: rgba(255,255,255,.09); }
+    .history-button:disabled { color: #566273; background: rgba(255,255,255,.02); cursor: not-allowed; }
+
+    .home-button {
+      min-width: 92px;
+      padding: 0 12px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      border-radius: 0;
+      color: #aebdcd;
+      background: rgba(255,255,255,.035);
+      cursor: pointer;
+      font-weight: 620;
+      letter-spacing: .04em;
+    }
+    .home-button:hover { color: var(--cyan); background: rgba(255,255,255,.09); }
+
+    .zoom-controls { display: flex; align-items: stretch; border-right: 1px solid var(--line); }
+    .zoom-button, .zoom-level {
+      min-width: 38px;
+      padding: 0 9px;
+      border: 0;
+      border-left: 1px solid var(--line);
+      color: #c9d5e2;
+      background: rgba(255,255,255,.045);
+      text-align: center;
+      cursor: pointer;
+      font: 650 16px/1 ui-monospace, "SFMono-Regular", Menlo, monospace;
+    }
+    .zoom-button:hover { background: rgba(255,255,255,.09); color: var(--cyan); }
+    .zoom-level { min-width: 50px; color: #7f8da1; cursor: default; font-size: 10px; }
+
+    .custom-panel {
+      position: fixed;
+      z-index: 12;
+      top: 82px;
+      right: 16px;
+      width: min(300px, calc(100vw - 32px));
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(7, 11, 18, .92);
+      box-shadow: 0 18px 46px rgba(0,0,0,.35);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .custom-panel__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .custom-panel__title { color: var(--ink); font-size: 13px; font-weight: 700; letter-spacing: .08em; }
+    .custom-panel__close { width: 26px; height: 26px; border: 0; border-radius: 6px; color: #91a0b3; background: transparent; cursor: pointer; font-size: 18px; line-height: 1; }
+    .custom-panel__close:hover { color: var(--pink); background: rgba(242,97,168,.1); }
+    .custom-field { display: grid; gap: 7px; margin-top: 13px; }
+    .custom-field label { display: flex; justify-content: space-between; color: #93a1b3; font-size: 11px; }
+    .custom-field output { color: var(--cyan); font: 600 10px ui-monospace, monospace; }
+    .custom-field select, .custom-field input[type="range"] { width: 100%; }
+    .custom-field select { min-height: 34px; padding: 0 9px; border: 1px solid var(--line); border-radius: 7px; color: #dce5ef; background: #101722; }
+    .custom-field input[type="range"] { accent-color: var(--cyan); }
+    .custom-panel__note { margin: 14px 0 0; color: #647286; font-size: 10px; line-height: 1.5; }
+    .custom-button { min-width: 68px; padding: 0 12px; border: 0; border-right: 1px solid var(--line); border-radius: 0; color: #c9d5e2; background: rgba(255,255,255,.045); cursor: pointer; font-weight: 650; letter-spacing: .06em; }
+    .custom-button:hover, .custom-button[aria-expanded="true"] { color: var(--cyan); background: rgba(255,255,255,.09); }
+
+    .achievement-button {
+      min-width: 60px;
+      padding: 0 10px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      border-radius: 0;
+      color: #c9d5e2;
+      background: rgba(255,255,255,.045);
+      cursor: pointer;
+      font-weight: 650;
+      letter-spacing: .06em;
+    }
+    .achievement-button:hover, .achievement-button[aria-expanded="true"] { color: var(--yellow); background: rgba(255,255,255,.09); }
+
+    .achievement-panel {
+      position: fixed;
+      z-index: 12;
+      top: 82px;
+      right: 16px;
+      width: min(310px, calc(100vw - 32px));
+      padding: 15px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(7, 11, 18, .94);
+      box-shadow: 0 18px 46px rgba(0,0,0,.35);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .achievement-panel__head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 11px; }
+    .achievement-panel__title { color: var(--ink); font-size: 13px; font-weight: 700; letter-spacing: .08em; }
+    .achievement-panel__count { color: #7f8da1; font: 600 10px/1 ui-monospace, monospace; }
+    .achievement-panel__close { width: 26px; height: 26px; margin: -5px -5px -5px 0; border: 0; border-radius: 6px; color: #91a0b3; background: transparent; cursor: pointer; font-size: 18px; line-height: 1; }
+    .achievement-panel__close:hover { color: var(--pink); background: rgba(242,97,168,.1); }
+    .achievement-list { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+    .achievement-item { display: grid; grid-template-columns: 20px 1fr; gap: 8px; align-items: center; min-height: 42px; padding: 7px 8px; border: 1px solid rgba(184,208,225,.1); border-radius: 8px; color: #6d7b8f; background: rgba(255,255,255,.025); }
+    .achievement-item__mark { display: grid; place-items: center; width: 19px; height: 19px; border: 1px solid rgba(184,208,225,.18); border-radius: 50%; color: #637084; font: 700 10px/1 ui-monospace, monospace; }
+    .achievement-item__name { color: #8491a3; font-size: 11px; font-weight: 650; }
+    .achievement-item__hint { margin-top: 3px; color: #596779; font-size: 9px; line-height: 1.35; }
+    .achievement-item.is-unlocked { border-color: rgba(245,215,110,.28); background: rgba(245,215,110,.06); }
+    .achievement-item.is-unlocked .achievement-item__mark { border-color: rgba(245,215,110,.7); color: var(--yellow); box-shadow: 0 0 10px rgba(245,215,110,.18); }
+    .achievement-item.is-unlocked .achievement-item__name { color: #f5d76e; }
+    .achievement-item.is-unlocked .achievement-item__hint { color: #a99563; }
+
+    .pause-indicator {
+      position: fixed;
+      z-index: 9;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      padding: 8px 12px;
+      border: 1px solid rgba(245,215,110,.2);
+      border-radius: 999px;
+      color: #d9c47b;
+      background: rgba(5,9,15,.76);
+      backdrop-filter: blur(12px);
+      font: 600 10px/1 ui-monospace, "SFMono-Regular", Menlo, monospace;
+      letter-spacing: .14em;
+      pointer-events: none;
+    }
+
+    .hint {
+      position: fixed;
+      z-index: 9;
+      left: 50%;
+      bottom: max(20px, var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)));
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 13px;
+      border: 1px solid rgba(184,208,225,.12);
+      border-radius: 999px;
+      color: #8794a6;
+      background: rgba(7,11,18,.7);
+      backdrop-filter: blur(12px);
+      font-size: 11px;
+      pointer-events: none;
+      transition: opacity .5s ease;
+    }
+    .hint::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 9px var(--cyan); }
+    .hint.is-faded { opacity: 0; }
+
+    /* Achievement UI stays intentionally tiny: one line, one item, no interaction capture. */
+    .achievement {
+      position: fixed;
+      z-index: 30;
+      right: 16px;
+      bottom: max(16px, var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px)));
+      max-width: min(280px, calc(100vw - 32px));
+      min-height: 32px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 11px;
+      border: 1px solid rgba(87,230,230,.24);
+      border-radius: 9px;
+      color: #cdd8e4;
+      background: rgba(5,9,15,.88);
+      box-shadow: 0 8px 24px rgba(0,0,0,.22);
+      backdrop-filter: blur(12px);
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity .18s ease, transform .18s ease;
+      font-size: 11px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .achievement.is-visible { opacity: 1; transform: translateY(0); }
+    .achievement__mark { flex: 0 0 auto; width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 9px var(--cyan); }
+    .achievement strong { color: var(--cyan); font-size: 9px; letter-spacing: .1em; }
+
+    .result {
+      z-index: 40;
+      padding: clamp(14px, 3vw, 32px);
+      background: rgba(3,5,8,.9);
+      backdrop-filter: blur(18px);
+      overflow: auto;
+    }
+
+    .result__layout {
+      width: min(1040px, 100%);
+      min-height: min(680px, calc(100dvh - 40px));
+      display: grid;
+      grid-template-columns: minmax(280px, .78fr) minmax(320px, 1fr);
+      gap: clamp(24px, 5vw, 72px);
+      align-items: center;
+    }
+
+    .poster-wrap {
+      position: relative;
+      width: min(100%, 430px);
+      aspect-ratio: 4 / 5;
+      justify-self: end;
+      border: 1px solid rgba(184,208,225,.2);
+      background: #05070b;
+      box-shadow: 0 30px 100px rgba(0,0,0,.5), 0 0 60px rgba(87,230,230,.06);
+      overflow: hidden;
+    }
+    #poster-canvas { width: 100%; height: 100%; display: block; }
+
+    .result__copy { max-width: 440px; }
+    .result__kicker { color: var(--cyan); font: 600 10px/1 ui-monospace, "SFMono-Regular", Menlo, monospace; letter-spacing: .2em; }
+    .result h2 { margin: 16px 0 18px; font-size: clamp(42px, 6vw, 72px); line-height: .96; letter-spacing: -.055em; }
+    .result__summary { margin: 0 0 28px; color: #94a2b4; line-height: 1.75; }
+    .result__stats { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .result-stat { padding: 17px 6px 16px 0; }
+    .result-stat b { display: block; color: var(--ink); font: 600 23px/1 ui-monospace, "SFMono-Regular", Menlo, monospace; }
+    .result-stat span { display: block; margin-top: 8px; color: #67758a; font-size: 10px; letter-spacing: .12em; }
+    .result__actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px; }
+    .result__actions .primary, .result__actions .secondary { width: 100%; min-height: 48px; }
+    .result__actions .restart { grid-column: 1 / -1; }
+    .share-fallback { margin-top: 12px; }
+    .share-fallback label { display: block; margin-bottom: 6px; color: #7f8da0; font-size: 11px; }
+    .share-fallback input { width: 100%; height: 40px; padding: 0 10px; border: 1px solid var(--line); border-radius: 8px; color: #b9c5d3; background: rgba(255,255,255,.04); }
+
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+    @media (max-width: 720px) {
+      .welcome { background: linear-gradient(180deg, rgba(5,7,11,.9), rgba(5,7,11,.73)); padding: max(20px, var(--safe-area-inset-top, env(safe-area-inset-top, 0px))) 20px max(20px, var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px))); }
+      .welcome__content { width: 100%; padding: 0; justify-content: flex-end; padding-bottom: 6vh; }
+      .brand { left: 0; top: 4px; }
+      .welcome h1 { font-size: clamp(54px, 19vw, 78px); }
+      .welcome h1 span { margin-left: 13vw; }
+      .intro { margin: 25px 0 20px; font-size: 14px; line-height: 1.72; }
+      .city-name-field { margin-bottom: 12px; }
+      .primary { min-height: 50px; }
+      .instruction-row { margin-top: 18px; }
+      .recent { margin-top: 18px; }
+      /* Dynamic-island devices may report a zero CSS safe-area inset in the
+         embedded browser. Keep the HUD below the physical cutout anyway. */
+      .hud { top: max(56px, calc(var(--safe-area-inset-top, env(safe-area-inset-top, 0px)) + 12px)); left: 8px; right: 8px; gap: 7px; }
+      .hud { overflow: visible; }
+      .hud__identity { min-width: 0; padding: 10px 11px; flex: 1 1 auto; }
+      .hud__cluster { min-width: 0; max-width: calc(100vw - 16px); overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+      .hud__cluster::-webkit-scrollbar { display: none; }
+      .hud__name { max-width: 130px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 13px; }
+      .hud__eyebrow { font-size: 8px; }
+      .metric { min-width: 30px; padding: 9px 4px; text-align: center; }
+      .metric:nth-child(2) { display: none; }
+      .metric__value { font-size: 14px; }
+      .metric__label { font-size: 8px; letter-spacing: .04em; }
+      .seal-button { min-width: 46px; padding: 0 5px; font-size: 12px; }
+      .pause-button { min-width: 38px; padding: 0 4px; font-size: 11px; }
+      .history-button { min-width: 30px; padding: 0 2px; font-size: 10px; }
+      .home-button { min-width: 54px; padding: 0 4px; font-size: 10px; }
+      .custom-button { min-width: 34px; padding: 0 3px; font-size: 10px; }
+      .achievement-button { min-width: 34px; padding: 0 3px; font-size: 10px; }
+      .zoom-button { min-width: 18px; padding: 0 1px; font-size: 14px; }
+      .zoom-level { min-width: 22px; padding: 0; font-size: 9px; }
+      .custom-panel { top: 74px; right: 8px; width: min(292px, calc(100vw - 16px)); }
+      .achievement-panel { top: 74px; right: 8px; width: min(292px, calc(100vw - 16px)); }
+      .hint { bottom: max(13px, var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px))); font-size: 10px; }
+      .achievement { right: 10px; bottom: max(10px, var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px))); min-height: 28px; padding: 6px 9px; max-width: calc(100vw - 20px); font-size: 10px; }
+      .result { display: block; padding: max(16px, var(--safe-area-inset-top, env(safe-area-inset-top, 0px))) 16px max(20px, var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px))); }
+      .result__layout { display: flex; flex-direction: column; min-height: auto; gap: 24px; }
+      .poster-wrap { width: min(74vw, 310px); flex: 0 0 auto; align-self: center; }
+      .result__copy { width: 100%; max-width: 520px; }
+      .result h2 { font-size: 38px; margin: 10px 0 10px; }
+      .result__summary { margin-bottom: 16px; font-size: 13px; line-height: 1.6; }
+      .result-stat { padding: 13px 4px 12px 0; }
+      .result-stat b { font-size: 18px; }
+      .result__actions { margin-top: 16px; }
+    }
+
+    /* Landscape phones can be wider than 720px, so use pointer/height as a
+       second guard for the same dynamic-island obstruction. */
+    @media (pointer: coarse) and (max-height: 600px) {
+      .hud { top: max(52px, calc(var(--safe-area-inset-top, env(safe-area-inset-top, 0px)) + 10px)); }
+    }
+
+    @media (max-height: 690px) and (max-width: 720px) {
+      .welcome__content { padding-bottom: 0; }
+      .welcome h1 { font-size: 52px; }
+      .intro { margin: 18px 0 14px; }
+      .instruction-row, .recent { margin-top: 12px; }
+      .result__layout { flex-direction: row; align-items: center; }
+      .poster-wrap { width: min(41vw, 260px); }
+      .result h2 { font-size: 34px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="city-canvas" aria-label="一座由你的鼠标或手指轨迹生成的霓虹城市"></canvas>
+
+  <section class="screen welcome" id="welcome" aria-labelledby="welcome-title">
+    <div class="welcome__content">
+      <div class="brand">Neon Trace / 01</div>
+      <h1 id="welcome-title">轨迹<span>之城</span></h1>
+      <p class="intro">拖动，会铺成道路。转弯，会点亮街区。停留，会让建筑生长。<strong>没有倒计时，直到你决定封城。</strong></p>
+      <div class="city-name-field">
+        <label for="city-name-input">给这座城命名</label>
+        <input id="city-name-input" type="text" maxlength="18" autocomplete="off" placeholder="留空，使用随机城市名">
+      </div>
+      <button class="primary" id="start-button">开始漫游 <span class="arrow">↗</span></button>
+      <div class="instruction-row" aria-label="操作说明">
+        <span><i></i> 按住拖动：铺路</span>
+        <span><i></i> 点击 / 轻触：地标</span>
+      </div>
+      <div class="recent" id="recent" hidden>
+        <div class="recent__head">
+          <div class="recent__label">Recently sealed</div>
+          <button class="recent__clear" id="recent-clear" type="button">清空记录</button>
+        </div>
+        <div class="recent__list" id="recent-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <header class="hud" id="hud" hidden>
+    <div class="hud__identity">
+      <div class="hud__eyebrow">Live city / <span id="city-code">0000</span></div>
+      <div class="hud__name" id="city-name">未眠区</div>
+    </div>
+    <div class="hud__cluster">
+      <div class="metric"><div class="metric__value" id="road-count">0</div><div class="metric__label">道路</div></div>
+      <div class="metric"><div class="metric__value" id="block-count">0</div><div class="metric__label">街区</div></div>
+      <div class="metric"><div class="metric__value" id="landmark-count">0</div><div class="metric__label">地标</div></div>
+      <div class="zoom-controls" aria-label="画布缩放">
+        <button class="zoom-button" id="zoom-out" type="button" aria-label="缩小">−</button>
+        <span class="zoom-level" id="zoom-level" aria-live="polite">100%</span>
+        <button class="zoom-button" id="zoom-in" type="button" aria-label="放大">＋</button>
+      </div>
+      <button class="history-button" id="undo-button" type="button" disabled>撤回</button>
+      <button class="history-button" id="restart-button-hud" type="button">重来</button>
+      <button class="home-button" id="save-home-button" type="button" title="保存当前城市并返回主页">保存·主页</button>
+      <button class="achievement-button" id="achievement-button" type="button" aria-expanded="false" aria-controls="achievement-panel">成就</button>
+      <button class="custom-button" id="custom-button" type="button" aria-expanded="false" aria-controls="custom-panel">自定义</button>
+      <button class="pause-button" id="pause-button" type="button" aria-pressed="false">暂停</button>
+      <button class="seal-button" id="seal-button">封城</button>
+    </div>
+  </header>
+
+  <aside class="custom-panel" id="custom-panel" hidden aria-label="城市自定义设置">
+    <div class="custom-panel__head">
+      <div class="custom-panel__title">城市自定义</div>
+      <button class="custom-panel__close" id="custom-close" type="button" aria-label="关闭自定义面板">×</button>
+    </div>
+    <div class="custom-field">
+      <label for="district-style">区域风格</label>
+      <select id="district-style">
+        <option value="auto">自动分区</option>
+        <option value="core">核心区</option>
+        <option value="commercial">商业区 / 美食街</option>
+        <option value="residential">居住区</option>
+        <option value="park">公园区</option>
+      </select>
+    </div>
+    <div class="custom-field">
+      <label for="traffic-density"><span>车辆密度</span><output id="traffic-value">100%</output></label>
+      <input id="traffic-density" type="range" min="0" max="200" step="10" value="100">
+    </div>
+    <div class="custom-field">
+      <label for="crowd-density"><span>人流量</span><output id="crowd-value">100%</output></label>
+      <input id="crowd-density" type="range" min="0" max="200" step="10" value="100">
+    </div>
+    <p class="custom-panel__note">设置会立即应用，也会随分享链接保存。</p>
+  </aside>
+
+  <aside class="achievement-panel" id="achievement-panel" hidden aria-label="已获得成就">
+    <div class="achievement-panel__head">
+      <div class="achievement-panel__title">城市成就</div>
+      <span class="achievement-panel__count" id="achievement-count">0 / 5</span>
+      <button class="achievement-panel__close" id="achievement-close" type="button" aria-label="关闭成就面板">×</button>
+    </div>
+    <ul class="achievement-list" id="achievement-list"></ul>
+  </aside>
+
+  <div class="hint" id="hint" hidden>按住鼠标或屏幕拖动来铺路</div>
+  <div class="pause-indicator" id="pause-indicator" hidden>城市暂停生长</div>
+  <div class="achievement" id="achievement" role="status" aria-live="polite">
+    <span class="achievement__mark"></span>
+    <strong>ACHIEVED</strong>
+    <span id="achievement-text"></span>
+  </div>
+
+  <section class="screen result" id="result" hidden aria-labelledby="result-title">
+    <div class="result__layout">
+      <div class="poster-wrap"><canvas id="poster-canvas" width="1200" height="1500"></canvas></div>
+      <div class="result__copy">
+        <div class="result__kicker">CITY SEALED · <span id="result-code">0000</span></div>
+        <h2 id="result-title">你的城市，<br>今晚落成。</h2>
+        <p class="result__summary" id="result-summary">每一条路都来自一次犹豫或一次决定。现在，它们有了灯光。</p>
+        <div class="result__stats">
+          <div class="result-stat"><b id="result-roads">0</b><span>条道路</span></div>
+          <div class="result-stat"><b id="result-blocks">0</b><span>个街区</span></div>
+          <div class="result-stat"><b id="result-landmarks">0</b><span>座地标</span></div>
+        </div>
+        <div class="result__actions">
+          <button class="primary" id="download-button">保存海报到相册</button>
+          <button class="secondary" id="share-button">显示分享链接</button>
+          <button class="secondary restart" id="restart-button">重新开始一座城</button>
+        </div>
+        <div class="share-fallback" id="share-fallback" hidden>
+          <label for="share-url">长按或选中下面的链接复制</label>
+          <input id="share-url" readonly>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="sr-only" id="live-status" aria-live="polite"></div>
+
+  <script src="./app.js"></script>
+
+</body>
+</html>

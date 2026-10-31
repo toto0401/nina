@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#090807">
+  <meta name="description" content="Nina 余知宴的个人宇宙。探索 AI 学习应用、游戏、互动网页，以及 2050 大会的分享经历。">
+  <title>Nina 余知宴 | My Little Universe</title>
+  <link rel="icon" href="assets/space/mark.svg" type="image/svg+xml">
+  <style>
+    @font-face{font-family:'SF Pro';src:local('SF Pro Text'),local('Arial');font-weight:400;font-display:swap}
+    @font-face{font-family:'SF Pro';src:local('SF Pro Text Bold'),local('Arial Bold');font-weight:700;font-display:swap}
+    @font-face{font-family:'SF Pro Thin';src:local('SF Pro Display Ultralight'),local('Helvetica Neue');font-weight:100;font-display:swap}
+    @font-face{font-family:Aalto;src:local('Aalto'),local('Arial Narrow'),local('Helvetica Neue');font-weight:400;font-display:swap}
+    :root{color-scheme:dark;font-family:'SF Pro',Arial,'PingFang SC','Microsoft YaHei',sans-serif;color:#fff;background:#090807;font-synthesis:none;--muted:#b8b7b3;--line:rgba(255,255,255,.23);--accent:#c5f5b5}
+    *{box-sizing:border-box;letter-spacing:0}
+    html,body{margin:0;width:100%;height:100%;overflow:hidden}
+    button,a{-webkit-tap-highlight-color:transparent}
+    button{font:inherit;color:inherit;cursor:pointer}
+    button:disabled{cursor:wait}
+    button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:6px}
+    button{border:0}a{color:inherit}button svg,a svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.5;flex-shrink:0}
+    [hidden]{display:none!important}
+    .experience{position:relative;isolation:isolate;width:100%;height:100%;height:100svh;min-height:560px;overflow:hidden;background:#090807}
+    .backgrounds,.background,.shade{position:absolute;inset:0;width:100%;height:100%}
+    .backgrounds{z-index:-2;background:center/cover url('assets/space/mars.jpg')}
+    .background{object-fit:cover;opacity:0;transition:opacity .8s ease}
+    .background.is-visible{opacity:1}
+    .shade{z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.32),transparent 25%,rgba(0,0,0,.12) 45%,rgba(0,0,0,.85) 100%)}
+    .chrome{position:absolute;z-index:4;transition:opacity .45s ease,filter .45s ease}
+    .header{left:32px;right:32px;top:max(26px,env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;gap:20px}
+    .brand{display:flex;align-items:center;gap:12px;text-decoration:none;background:none;padding:0}
+    .brand-symbol{width:36px;height:36px;object-fit:contain}
+    .brand-name{font-size:19px;font-weight:700}.brand-name small{font-size:11px;font-weight:400;color:#d4d1cd;margin-left:9px}
+    .header-actions{display:flex;align-items:center;gap:16px}
+    .nav{display:flex;align-items:center;border:1px solid rgba(255,255,255,.38);padding:4px;border-radius:99px;backdrop-filter:blur(12px);background:rgba(255,255,255,.06)}
+    .nav button{padding:10px 19px;background:none;border-radius:99px;font-size:13px;transition:background .2s,color .2s}
+    .nav button.is-active,.nav button:hover{background:#fff;color:#171714}
+    .language{display:flex;align-items:center;gap:7px;padding:8px 0;background:none;font-size:12px}
+    .language span{color:#aaa}.language span.current{color:#fff}.language i{height:12px;width:1px;background:#777}
+    .menu{width:40px;height:40px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;background:rgba(0,0,0,.15)}
+    .location{left:34px;top:126px;display:flex;gap:10px;align-items:center;font-size:10px;line-height:1.5;color:#dedad4}
+    .status-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px #b2ea9d55}
+    .location .divider{color:#777;margin:0 3px}
+    .planet-list{left:33px;top:42%;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px}
+    .planet-item{display:flex;align-items:center;gap:14px;padding:5px 0;background:none;color:#c9c5bf;text-align:left;font-size:12px}
+    .planet-item .index{font-size:10px;color:#c1bcb4;width:18px;font-variant-numeric:tabular-nums}
+    .planet-item.active{color:#fff;font-weight:700}.planet-item.active .index{font-size:0}.planet-item.active .index:before{content:'';display:block;width:10px;height:10px;background:#fff;border-radius:50%;margin-left:2px}
+    .planet-note{font-size:9px;color:#aaa39c;line-height:1.7;margin-top:24px}
+    .portal-wrap{left:51%;top:40%;width:300px;transform:translate(-50%,-50%)}
+    .portal-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;font-size:11px;color:#ddd9d1}
+    .portal-heading strong{font-weight:400;color:#fff;margin-left:8px}.portal-heading .number{color:#aba69f;font-size:10px}
+    .portal{position:relative;width:100%;aspect-ratio:320/350;display:block;background:transparent;border:0;padding:0;border-radius:84px}
+    .portal video,.portal img{position:absolute;width:1px;height:1px;visibility:hidden;pointer-events:none}
+    .portal:focus-visible{outline-offset:10px;border-radius:84px}
+    .portal-caption{display:flex;align-items:center;justify-content:center;gap:10px;font-size:10px;margin-top:18px;color:#d5d1c9}
+    .portal-caption svg{width:13px;height:13px}.portal-caption .thin-line{width:25px;height:1px;background:#77706a}
+    .portal-canvas{position:absolute;inset:0;z-index:3;width:100%;height:100%;pointer-events:none}
+    .planet-content{left:32px;right:40px;bottom:97px;display:flex;justify-content:space-between;align-items:flex-end;gap:45px;pointer-events:none}
+    .title-block{min-width:0}.eyebrow{display:flex;align-items:center;gap:12px;font-size:10px;color:#c8c4bc;line-height:1.6;margin:0 0 25px 7px}
+    .eyebrow:before{content:'';width:30px;height:1px;background:#b0aaa0}
+    .planet-content h1{font-family:Aalto,'Helvetica Neue',Arial,sans-serif;font-size:240px;font-weight:400;line-height:.78;margin:0;white-space:nowrap}
+    [data-planet=earth] .planet-content h1{font-size:170px}[data-planet=venus] .planet-content h1{font-size:130px}
+    .personal-info{width:375px;flex-shrink:0;pointer-events:auto}
+    .personal-info h2{font-size:22px;font-weight:400;margin:0 0 13px;line-height:1.5}
+    .personal-info .intro{font-size:12px;line-height:1.9;color:#d2cec8;margin:0 0 17px;max-width:350px}
+    #facts{margin:0;font-size:11px}.fact{display:grid;grid-template-columns:74px 1fr;gap:14px;border-top:1px solid var(--line);padding:9px 0;line-height:1.6}
+    .fact dt{color:#aaa69f}.fact dd{margin:0;color:#f0eee9}
+    .text-link{display:inline-flex;align-items:center;gap:21px;color:#fff;text-decoration:none;border-bottom:1px solid #90887d;background:none;padding:10px 0;font-size:12px;line-height:1.5}
+    .text-link svg{width:18px}.text-link:hover{color:var(--accent);border-color:var(--accent)}
+    .footer{left:34px;right:34px;bottom:max(25px,env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:16px;gap:20px;font-size:9px;color:#bdb7af}
+    .footer-identity{display:flex;gap:18px}.footer-center{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px}.footer-center b{font-weight:400;color:#fff}.footer-center .track{width:66px;height:1px;background:#665d54;position:relative}.track:after{content:'';position:absolute;left:var(--orbit-position,0%);top:-1px;width:22px;height:3px;background:#fff;transition:left .6s}
+    .motion-toggle{display:flex;align-items:center;gap:7px;background:none;padding:0;color:#ded8cf;font-size:9px}.motion-toggle svg{width:12px;height:12px}
+    .preloader{position:absolute;inset:0;z-index:20;background:#090807;transition:opacity .8s ease;pointer-events:none}
+    .preloader video{width:100%;height:100%;object-fit:cover}.preloader:after{content:'';position:absolute;inset:0;background:linear-gradient(transparent,#0006)}
+    .preloader.is-leaving{opacity:0}.preloader-count{position:absolute;z-index:22;left:50%;bottom:38px;transform:translateX(-50%);display:flex;align-items:baseline;gap:5px}.preloader-count span:first-child{font-size:60px;font-family:'SF Pro Thin',Arial,sans-serif;font-weight:100}.preloader-count .percent{font-size:18px}
+    .preload-mark{position:absolute;z-index:22;top:50%;left:50%;transform:translate(-50%,-50%);width:58px;height:58px;transition:top 1.4s cubic-bezier(.16,1,.3,1),left 1.4s cubic-bezier(.16,1,.3,1),width 1.4s,height 1.4s,transform 1.4s,opacity .4s}
+    .preload-mark.is-docked{left:32px;top:max(26px,env(safe-area-inset-top));width:36px;height:36px;transform:none}
+    .preloader-count.is-leaving{animation:count-out .65s both}
+    .loading{position:absolute;z-index:10;top:50%;left:50%;transform:translate(-50%,-50%);font-size:11px;opacity:0;pointer-events:none}.is-loading .loading{opacity:1}
+    .is-transitioning .chrome{opacity:0;filter:blur(8px);pointer-events:none}.is-transitioning .header{opacity:1;filter:none;pointer-events:auto}
+    .content-revealing .title-block{animation:title-rise 1s cubic-bezier(.16,1,.3,1) both}.content-revealing .personal-info{animation:fact-rise .9s .12s both}
+    .planet-list.is-switching .planet-item{animation:fact-rise .5s both}.planet-list.is-switching .planet-item:nth-child(2){animation-delay:.08s}.planet-list.is-switching .planet-item:nth-child(3){animation-delay:.16s}
+    .custom-cursor{position:fixed;left:0;top:0;z-index:100;pointer-events:none;opacity:0;transition:opacity .2s}.custom-cursor.is-visible{opacity:1}.cursor-ring{display:block;width:36px;height:36px;position:absolute;border:1px solid #ffffff99;border-radius:50%;transform:translate(-50%,-50%);transition:width .2s,height .2s;background:#ffffff0a;backdrop-filter:invert(.06)}.cursor-dot{position:absolute;width:4px;height:4px;border-radius:50%;background:#fff;transform:translate(-50%,-50%)}.cursor-label{position:absolute;top:27px;left:0;transform:translateX(-50%);font-size:10px;white-space:nowrap;opacity:0}.custom-cursor.is-enter .cursor-label{opacity:1}.custom-cursor.is-enter .cursor-ring{width:46px;height:46px}
+    @media(hover:hover) and (pointer:fine){body.cursor-ready:not(:has(dialog[open])) .experience,body.cursor-ready:not(:has(dialog[open])) .experience button,body.cursor-ready:not(:has(dialog[open])) .experience a{cursor:none}}
+    body:has(dialog[open]) .custom-cursor{display:none}
+    .dossier{position:fixed;inset:0;width:100%;max-width:none;height:100%;height:100dvh;max-height:none;margin:0;padding:0;border:0;background:#111210;color:#f5f5ef;overflow-y:auto;overscroll-behavior:contain}
+    .dossier::backdrop{background:#090807}.dossier[open]{animation:panel-in .4s both}.dossier-header{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:22px 40px;border-bottom:1px solid var(--line);background:#111210ee;backdrop-filter:blur(20px)}
+    .dossier-brand{font-size:15px;font-weight:700;background:none;padding:0;text-align:left}.dossier-brand span{font-weight:400;font-size:12px;color:#aaa;margin-left:12px}.dossier-actions{display:flex;align-items:center;gap:22px}.close{width:36px;height:36px;display:grid;place-items:center;border:1px solid #555;border-radius:50%;background:none}.close svg{width:16px;height:16px}
+    .dossier-body{max-width:1320px;margin:0 auto;padding:65px 50px 80px}.section-label{font-size:10px;color:#a9b09e;display:flex;align-items:center;gap:14px;margin:0 0 24px}.section-label:before{content:'';width:20px;height:1px;background:#858d78}.panel-title{font-size:52px;line-height:1.2;font-weight:400;margin:0 0 20px}.panel-intro{font-size:14px;line-height:1.9;color:#b4b8ad;max-width:590px;margin:0}.panel-heading-row{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;margin-bottom:42px}.project-count{font-family:'SF Pro Thin',Arial,sans-serif;font-size:64px;line-height:1;color:#c5f5b5}.project-count small{display:block;font-family:'SF Pro',Arial,sans-serif;font-size:10px;color:#acb4a2;margin-top:8px}
+    .filters{display:flex;gap:25px;border-bottom:1px solid var(--line);margin-bottom:30px;overflow-x:auto}.filter{background:none;color:#9ca295;font-size:12px;white-space:nowrap;padding:13px 2px;border-bottom:2px solid transparent}.filter[aria-pressed=true]{border-color:var(--accent);color:#fff}.filter small{font-size:9px;color:#919b86;margin-left:6px}
+    .project-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:44px 28px}.project-card{min-width:0;border-bottom:1px solid var(--line);padding-bottom:22px}.project-image-button{display:block;width:100%;padding:0;background:#1c211c;overflow:hidden;border-radius:4px;text-align:left}.project-image-button img{width:100%;aspect-ratio:16/10;display:block;object-fit:cover;transition:transform .65s cubic-bezier(.16,1,.3,1)}.project-image-button:hover img{transform:scale(1.035)}
+    .project-meta{font-size:10px;color:#aab49f;display:flex;justify-content:space-between;margin:17px 0 10px;gap:10px}.project-title-row{display:flex;align-items:center;justify-content:space-between;gap:10px}.project-title-row h3{font-size:24px;font-weight:400;margin:0}.project-card p{font-size:12px;line-height:1.9;color:#afb5a7;margin:11px 0 0}.project-open{border:1px solid #52604a;border-radius:50%;background:none;display:grid;place-items:center;width:32px;height:32px;flex-shrink:0}.project-open:hover{background:var(--accent);color:#111}
+    .art-preview{width:100%;aspect-ratio:16/10;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#e8eee7;color:#263c38}.art-preview .specimen{width:65%;border-top:1px solid #809b94;border-bottom:1px solid #809b94;padding:22px 0}.art-preview small{font-size:10px}.art-preview strong{font-weight:400;font-size:54px;display:block;line-height:1.1;margin:20px 0 16px}.art-preview .specimen p{font-size:12px;line-height:1.8;color:#3f6559;margin:0}.art-preview .preview-caption{position:absolute;bottom:15px;right:18px;font-size:9px;color:#4f6b60}.art-preview.starmap{background:#e5eaf4;color:#313958}.starmap .specimen{border-color:#a6b1cc}.starmap .specimen strong{font-size:38px}.starmap .specimen p{color:#526280}.emotion-list{display:flex;gap:10px;margin-top:20px}.emotion-list span{border:1px solid #a8b4cd;padding:7px 12px;border-radius:4px;font-size:11px}
+    .panel-bottom{display:flex;justify-content:space-between;gap:20px;font-size:10px;color:#969e8e;border-top:1px solid var(--line);margin-top:65px;padding-top:20px}.back-link{display:inline-flex;align-items:center;gap:10px;background:none;padding:0;font-size:12px;color:#c1c9b8;margin-bottom:38px}.back-link svg{width:16px}.detail-layout{display:grid;grid-template-columns:1.25fr 1fr;gap:50px;align-items:start;margin-top:35px}.detail-visual img{width:100%;height:auto;border-radius:4px;display:block}.detail-copy p{font-size:14px;line-height:2;color:#bbc2b2;margin:0 0 22px}.detail-copy h3{font-size:13px;font-weight:400;color:#f3f5ee;margin:25px 0 14px}.feature-list{padding:0;list-style:none;margin:0}.feature-list li{padding:12px 0;border-top:1px solid var(--line);font-size:12px;line-height:1.7;color:#c3ccba;display:flex;gap:13px}.feature-list li:before{content:'+';color:var(--accent)}.detail-note{font-size:11px!important;color:#99a58f!important;margin-top:22px!important}.action-link{display:inline-flex;align-items:center;gap:20px;background:#c5f5b5;color:#162010;padding:13px 20px;border-radius:4px;text-decoration:none;font-size:12px;margin-top:24px}.action-link:hover{background:#e0ffda}
+    .about-layout{display:grid;grid-template-columns:1.1fr 1fr;gap:90px;margin-top:48px}.about-statement{font-size:40px;font-weight:400;line-height:1.5;margin:0 0 26px;max-width:540px}.about-paragraph{font-size:14px;line-height:2.1;color:#b4bdab;max-width:500px}.about-index{font-size:10px;color:#8f9b84;margin-right:15px}.about-section{border-top:1px solid var(--line);padding:24px 0}.about-section h3{font-size:15px;font-weight:400;margin:0 0 15px}.tool-list{display:flex;gap:10px 24px;flex-wrap:wrap;font-size:14px;line-height:2;color:#e4e9dd}.about-section p{font-size:13px;line-height:1.9;color:#aeb9a3;margin:0}.interest-list{display:flex;gap:25px;margin-top:35px;font-size:12px;color:#dbe9ce}
+    .journey-layout{display:grid;grid-template-columns:1fr 1.1fr;gap:70px;align-items:start;margin-top:40px}.conference-video{display:block;width:100%;height:530px;max-height:65vh;object-fit:contain;background:#060706;border-radius:4px}.video-caption{font-size:10px;color:#a0ab95;line-height:1.8;margin-top:12px}.timeline-item{position:relative;padding:0 0 30px 28px;border-left:1px solid #435238}.timeline-item:before{content:'';width:7px;height:7px;background:var(--accent);border-radius:50%;position:absolute;left:-4px;top:5px}.timeline-item small{font-size:10px;color:#a8bc99}.timeline-item h3{font-size:24px;font-weight:400;margin:12px 0 15px}.timeline-item p{font-size:13px;line-height:2;color:#b8c4ac;margin:0}.timeline-item .text-link{margin-top:10px}
+    .project-image-button img{height:auto}
+    @keyframes count-out{to{opacity:0;filter:blur(7px);transform:translate(-50%,-25px)}}
+    @keyframes title-rise{from{opacity:0;filter:blur(8px);transform:translateY(24px)}to{opacity:1;filter:none;transform:none}}
+    @keyframes fact-rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+    @keyframes panel-in{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+    @media(min-width:1600px){.portal-wrap{width:340px;top:41%}.planet-content h1{font-size:290px}[data-planet=earth] .planet-content h1{font-size:225px}[data-planet=venus] .planet-content h1{font-size:175px}.personal-info{width:430px}.personal-info h2{font-size:26px}.personal-info .intro{font-size:14px;max-width:400px}#facts{font-size:12px}.planet-content{bottom:110px}.fact{padding:11px 0}}
+    @media(max-width:1100px){.planet-content h1{font-size:190px}[data-planet=earth] .planet-content h1{font-size:135px}[data-planet=venus] .planet-content h1{font-size:105px}.personal-info{width:320px}.portal-wrap{width:250px;top:38%}.planet-content{gap:20px}.eyebrow{font-size:9px}.header{left:24px;right:24px}.brand-name small{display:none}.about-layout{gap:45px}.journey-layout{gap:40px}}
+    @media(max-width:800px){.nav{display:none}.header{left:22px;right:22px;top:max(22px,env(safe-area-inset-top))}.location{left:24px;top:100px}.planet-list{left:24px;top:37%;gap:9px}.planet-note{display:none}.portal-wrap{left:57%;top:34%;width:240px}.planet-content{left:24px;right:24px;bottom:91px;gap:20px;align-items:flex-end}.planet-content h1{font-size:150px}[data-planet=earth] .planet-content h1{font-size:104px}[data-planet=venus] .planet-content h1{font-size:80px}.personal-info{width:300px}.personal-info h2{font-size:19px}.eyebrow{max-width:230px;margin:0 0 20px}.footer{left:24px;right:24px}.footer-identity span:last-child{display:none}.footer-center{position:static;transform:none}.preload-mark.is-docked{left:22px;top:max(22px,env(safe-area-inset-top))}.dossier-header{padding:18px 24px}.dossier-body{padding:42px 26px 60px}.panel-title{font-size:40px}.detail-layout{gap:30px}.about-layout{gap:32px}.about-statement{font-size:30px}.journey-layout{gap:30px}.conference-video{height:440px}.project-title-row h3{font-size:20px}}
+    @media(max-width:600px){.experience{min-height:620px}.header{left:20px;right:20px;gap:10px;top:max(20px,env(safe-area-inset-top))}.brand{gap:8px}.brand-name{font-size:17px}.brand-symbol{width:28px;height:28px}.header-actions{gap:18px}.menu{width:32px;height:32px}.menu svg{width:16px}.location{left:21px;top:89px;font-size:9px}.planet-list{left:auto;right:20px;top:95px;transform:none;flex-direction:row;gap:9px}.planet-item{padding:4px}.planet-item .index{width:12px;font-size:9px}.planet-item .planet-label{display:none}.planet-item.active .index:before{width:6px;height:6px;margin-left:2px}.portal-wrap{left:50%;top:32%;width:175px}.portal{border-radius:52px}.portal-heading{font-size:10px;margin-bottom:10px}.portal-heading strong{margin-left:4px}.portal-caption{font-size:9px;margin-top:10px}.portal-caption .thin-line{width:16px}.planet-content{left:20px;right:20px;bottom:72px;display:block}.planet-content h1{font-size:102px;line-height:.8}[data-planet=earth] .planet-content h1{font-size:77px}[data-planet=venus] .planet-content h1{font-size:61px}.eyebrow{font-size:8px;margin:0 0 14px;gap:8px}.eyebrow:before{width:20px}.title-block{margin-bottom:23px}.personal-info{width:100%}.personal-info h2{font-size:17px;line-height:1.3;margin-bottom:8px}.personal-info .intro{font-size:11px;line-height:1.8;margin-bottom:10px;max-width:100%}#facts{font-size:10px}.fact{padding:5px 0;grid-template-columns:58px 1fr;gap:8px}.text-link{font-size:11px;padding:8px 0;gap:16px}.footer{left:20px;right:20px;bottom:max(20px,env(safe-area-inset-bottom));font-size:8px;padding-top:12px;gap:12px}.footer-identity{gap:0}.footer-center{gap:8px}.footer-center .track{width:42px}.track:after{width:14px}.motion-toggle{font-size:8px;gap:4px}.motion-toggle svg{width:10px}.preload-mark.is-docked{left:20px;top:max(20px,env(safe-area-inset-top));width:28px;height:28px}.dossier-header{padding:18px 20px;gap:12px}.dossier-brand{font-size:13px}.dossier-brand span{font-size:10px;margin-left:8px}.dossier-actions{gap:18px}.dossier-body{padding:35px 20px 45px}.panel-heading-row{gap:15px;align-items:flex-start;margin-bottom:25px}.panel-title{font-size:34px}.panel-intro{font-size:12px}.project-count{font-size:44px;flex-shrink:0}.project-count small{font-size:8px}.section-label{margin-bottom:20px;font-size:9px}.filters{gap:23px;margin-bottom:24px}.project-grid{grid-template-columns:1fr;gap:30px}.project-title-row h3{font-size:23px}.project-meta{font-size:9px}.project-card p{font-size:12px}.art-preview .specimen{padding:15px 0}.art-preview strong{font-size:42px;margin:15px 0}.starmap .specimen strong{font-size:30px}.detail-layout,.about-layout,.journey-layout{grid-template-columns:1fr;gap:30px}.detail-layout{margin-top:25px}.detail-copy p{font-size:13px}.about-layout{margin-top:25px}.about-statement{font-size:30px}.about-paragraph{font-size:13px}.about-section{padding:20px 0}.journey-layout{margin-top:30px}.conference-video{height:430px;max-height:60vh}.timeline-item h3{font-size:22px}.panel-bottom{margin-top:40px;font-size:9px}.panel-bottom span:last-child{max-width:48%;text-align:right}}
+    @media(max-width:600px) and (max-height:760px){.portal-wrap{width:140px;top:29%}.portal-caption{display:none}.title-block{margin-bottom:16px}.planet-content h1{font-size:84px}[data-planet=earth] .planet-content h1{font-size:65px}[data-planet=venus] .planet-content h1{font-size:53px}.planet-content{bottom:67px}.eyebrow{margin-bottom:11px}.personal-info .intro{font-size:10px;line-height:1.7}.personal-info h2{font-size:16px}.fact{padding:4px 0}}
+    @media(max-height:650px) and (min-width:601px){.location{top:94px}.portal-wrap{top:37%;width:190px}.planet-content{bottom:75px}.planet-content h1{font-size:155px}[data-planet=earth] .planet-content h1{font-size:115px}[data-planet=venus] .planet-content h1{font-size:90px}.personal-info h2{font-size:18px}.personal-info .intro{font-size:11px;margin-bottom:10px}.fact{padding:5px 0}.eyebrow{margin-bottom:20px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.custom-cursor{display:none!important}}
+  </style>
+  <link rel="stylesheet" href="github-links.css">
+</head>
+<body>
+  <main class="experience" data-planet="mars">
+    <div class="backgrounds" aria-hidden="true">
+      <video id="mars-background" class="background is-visible" muted playsinline preload="auto" loop poster="assets/space/mars.jpg" src="assets/space/mars.mp4"></video>
+      <video id="earth-background" class="background" muted playsinline preload="auto" poster="assets/space/earth.jpg" src="assets/space/earth.mp4"></video>
+      <video id="venus-background" class="background" muted playsinline preload="auto" poster="assets/space/venus.jpg" src="assets/space/venus.mp4"></video>
+    </div>
+    <div class="shade" aria-hidden="true"></div>
+    <canvas id="portal-canvas" class="portal-canvas" aria-hidden="true"></canvas>
+    <canvas id="scene-canvas" hidden aria-hidden="true"></canvas>
+    <header class="header chrome">
+      <button class="brand" data-state="mars" aria-label="Nina · 余知宴">
+        <img class="brand-symbol" src="assets/space/mark.svg" alt="">
+        <span class="brand-name">NINA<small data-i18n="brandSub">余知宴的个人宇宙</small></span>
+      </button>
+      <div class="header-actions">
+        <nav class="nav" aria-label="主导航" data-aria="navigation">
+          <button data-panel="about" class="is-active" data-i18n="navAbout">关于我</button>
+          <button data-panel="works" data-i18n="navWorks">我的作品</button>
+          <button data-panel="journey" data-i18n="navJourney">我的经历</button>
+        </nav>
+        <button class="language" data-language aria-label="Switch to English"><span data-lang-label="zh" class="current">中</span><i aria-hidden="true"></i><span data-lang-label="en">EN</span></button>
+        <button class="menu" data-panel="menu" aria-label="打开菜单" data-aria="openMenu" title="菜单 / Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14M5 16h14"/></svg></button>
+      </div>
+    </header>
+    <div class="location chrome"><span class="status-dot"></span><span data-i18n="orbitLabel">一个持续生长的个人宇宙</span><span class="divider">/</span><span id="location-name">MARS</span></div>
+    <aside class="planet-list chrome" aria-label="目的地" data-aria="destinations"></aside>
+    <section class="portal-wrap chrome" aria-label="下一站" data-aria="nextDestination">
+      <div class="portal-heading"><span data-i18n="next">下一站</span><span><span class="number" id="next-number">[02]</span><strong id="next-name">我的作品</strong></span></div>
+      <button id="portal" class="portal" aria-label="进入我的作品">
+        <video id="portal-video" muted playsinline preload="auto" src="assets/space/earth.mp4"></video>
+        <img id="portal-image" src="assets/space/mercury.jpg" alt="" hidden>
+      </button>
+      <div class="portal-caption" aria-hidden="true"><span class="thin-line"></span><span data-i18n="enterOrbit">进入下一重宇宙</span><svg viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></div>
+    </section>
+    <section class="planet-content chrome" aria-live="polite">
+      <div class="title-block"><p class="eyebrow" id="eyebrow">AI EXPLORER · GAME MAKER · STUDENT</p><h1 id="planet-title">NINA</h1></div>
+      <div class="personal-info"><h2 id="info-title">你好，我是余知宴。</h2><p class="intro" id="info-intro">也可以叫我 Nina。我用 AI 写代码，把学习中的小问题、脑海里的小游戏，变成可以使用的作品。</p><dl id="facts"></dl><button class="text-link" id="primary-action"><span data-i18n="exploreWorks">探索我的作品</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button></div>
+    </section>
+    <footer class="footer chrome"><div class="footer-identity"><span>NINA · 余知宴</span><span data-i18n="madeWith">好奇心驱动，AI 协作创造。</span></div><div class="footer-center"><b id="orbit-index">01</b><span class="track"></span><span>03</span></div><button class="motion-toggle" id="motion-toggle" aria-pressed="false" title="暂停背景动画 / Pause motion"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3v10M11 3v10"/></svg><span data-i18n="pauseMotion">暂停动态</span></button></footer>
+    <div class="preloader" id="preloader" aria-hidden="true"><video id="preloader-video" muted playsinline preload="auto" src="assets/space/intro.mp4" poster="assets/space/mars.jpg"></video></div>
+    <img class="preload-mark" id="floating-logo" src="assets/space/mark.svg" alt="">
+    <div class="preloader-count" id="preloader-count" aria-hidden="true"><span id="preloader-value">0</span><span class="percent">%</span></div>
+    <div class="loading" data-i18n="preparing" role="status">正在准备下一段旅程…</div>
+    <video id="transition-video" muted playsinline preload="auto" hidden></video>
+  </main>
+  <div class="custom-cursor" aria-hidden="true"><span class="cursor-ring"></span><span class="cursor-dot"></span><span class="cursor-label" data-i18n="enter">进入</span></div>
+  <dialog class="dossier" id="dossier" aria-labelledby="panel-title">
+    <header class="dossier-header"><button class="dossier-brand" data-home>NINA<span>余知宴</span></button><div class="dossier-actions"><button class="language" data-language aria-label="Switch to English"><span data-lang-label="zh" class="current">中</span><i aria-hidden="true"></i><span data-lang-label="en">EN</span></button><button class="close" id="close-panel" aria-label="关闭" data-aria="close" title="关闭 / Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div></header>
+    <div class="dossier-body" id="panel-body"></div>
+  </dialog>
+  <noscript><style>.preloader,.preload-mark,.preloader-count{display:none}.portal-wrap{display:none}</style><p style="position:fixed;bottom:0;z-index:50;background:#111;padding:12px">Nina · 余知宴。请启用 JavaScript 浏览互动作品集。Please enable JavaScript to explore the portfolio.</p></noscript>
+  <script>
+  (() => {
+    'use strict';
+    const $ = (s, root = document) => root.querySelector(s);
+    const $$ = (s, root = document) => [...root.querySelectorAll(s)];
+    const media = {mars:'assets/space/mars.mp4',earth:'assets/space/earth.mp4',venus:'assets/space/venus.mp4',intro:'assets/space/intro.mp4'};
+    // Original Planet Jumping footage, cached locally so the portfolio can travel offline.
+    const originalAssets = {
+      mars:'https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/3c83091e-4046-4fd6-adbb-2edb728be79a.mp4',
+      earth:'https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/fc3ded42-e845-41f3-a830-5cab512d79cd.mp4',
+      venus:'https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/b30f64d9-1637-477a-83df-d0fc6461a422.mp4',
+      intro:'https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/5fc5651c-3b5d-4171-b507-87f7e635d1b4.mp4'
+    };
+    const copy = {
+      zh:{brandSub:'余知宴的个人宇宙',navigation:'主导航',navAbout:'关于我',navWorks:'我的作品',navJourney:'我的经历',openMenu:'打开菜单',close:'关闭',destinations:'目的地',nextDestination:'下一站',orbitLabel:'一个持续生长的个人宇宙',next:'下一站',enterOrbit:'进入下一重宇宙',enter:'进入',exploreWorks:'探索我的作品',madeWith:'好奇心驱动，AI 协作创造。',pauseMotion:'暂停动态',resumeMotion:'恢复动态',preparing:'正在准备下一段旅程…',all:'全部',apps:'应用',games:'游戏',web:'互动网页',selectedWorks:'我的作品',worksIntro:'从一个“要是能这样就好了”开始，到一个真正能打开的作品。这些是我用 AI 一起做出来的小宇宙。',projects:'个创作项目',worksLabel:'02 / 创作档案',projectDetails:'查看项目',backWorks:'返回全部作品',features:'作品里有什么',motivation:'为什么做它',preview:'项目视觉摘录',demo:'打开作品',demoNote:'在新标签页打开可试玩的网页作品。',prototypeNote:'这是开发中的项目。这里展示现有功能与设计，不代表所有在线服务已经上线。',teamNote:'微光黑客松团队项目 · 星图舰队。我是团队成员之一。',aboutLabel:'01 / 关于我',aboutTitle:'余知宴，也叫 Nina。',aboutStatement:'好奇心，\n是我的引力。',aboutText:'我喜欢玩游戏、听音乐、画画，也喜欢琢磨：如果由我来做，这个工具或游戏会是什么样子？\n\n于是，我开始用 AI 写代码，做学习应用、互动网页和自己的游戏。从一个小想法开始，一点点试、一点点改。',tools:'我日常使用的工具',toolsText:'用 ChatGPT、Gemini 和 Claude 查找思路、整理信息；用 Codex 和 Claude Code 协作写代码、调试和完善作品。',interests:'游戏、音乐与画画',interestsText:'游戏让我关注玩法与反馈；音乐让我想做自己的音游；画画让我更在意作品的角色和画面。',assistant:'作为助教，我想做什么',assistantText:'先听清楚问题，再一起尝试。可以一起查资料、翻译英文、整理单词卡，也可以从第一步开始做网站和 App。',journeyLabel:'03 / 真实世界的探索',journeyTitle:'走出去，也分享出来。',journeyIntro:'把作品带到现实里，听见别人的问题，也看见新的可能。',conference:'2050 大会',conferenceTag:'分享 / 学习助手',conferenceText:'我参加过 2050 大会，分享了自己做的辅助学习 App：把资料查找、英文翻译和单词复习放在一起，让学习少一些来回切换。',videoCaption:'我的 2050 大会分享视频 · 点击播放可听到声音',hackathon:'微光黑客松',hackathonTag:'协作 / 星图舰队',hackathonText:'和队友一起探索星图 App，尝试把抽象的社交规则变成更直观的卡片，帮助自闭症儿童理解情绪和生活中的边界。',ongoing:'继续把想法做出来',ongoingTag:'正在进行 / 创作与学习',ongoingText:'从海岛探索到节奏游戏，从每日单词到互动城市。我想继续做自己也愿意使用、愿意玩的作品。',seeProject:'了解这个项目',footerNote:'作品来自我的实际项目与创作记录',menuTitle:'选择一个目的地',menuLabel:'NINA / 导航',menuAbout:'认识 Nina，了解我的工具和兴趣。',menuWorks:'八个应用、游戏与互动网页。',menuJourney:'2050 大会、黑客松与接下来的探索。',rolePersonal:'个人创作 · AI 辅助开发',roleTeam:'团队项目 · AI 辅助开发',noResults:'这个分类暂无作品。',imageAlt:'项目实机画面',starPreviewTitle:'把规则，变成看得见的卡片。',starPreviewCopy:'社交规则 · 情绪认识 · 生活流程',starPreviewNote:'功能摘录 / 非实机截图',vocabPreviewTitle:'analyze',vocabPreviewCopy:'把信息拆开研究，找出规律或原因。',vocabPreviewNote:'词汇内容摘录 / 非实机截图'},
+      en:{brandSub:"A little universe by Nina",navigation:'Main navigation',navAbout:'About',navWorks:'Works',navJourney:'Journey',openMenu:'Open menu',close:'Close',destinations:'Destinations',nextDestination:'Next destination',orbitLabel:'A little universe, always growing',next:'Next',enterOrbit:'Enter the next orbit',enter:'Enter',exploreWorks:'Explore my work',madeWith:'Powered by curiosity. Created with AI.',pauseMotion:'Pause motion',resumeMotion:'Resume motion',preparing:'Preparing the next orbit…',all:'All',apps:'Apps',games:'Games',web:'Interactive web',selectedWorks:'Selected works',worksIntro:'A small “what if” becomes something you can actually open. These are the little worlds I have been making with AI.',projects:'creative projects',worksLabel:'02 / CREATIVE ARCHIVE',projectDetails:'View project',backWorks:'Back to all works',features:'Inside the project',motivation:'Why I made it',preview:'Project excerpt',demo:'Open project',demoNote:'Opens a playable web project in a new tab.',prototypeNote:'A project in development. These are its current features and design goals; some online services are still being connected.',teamNote:'Glimmer Hackathon team project · Star Map Fleet. I am one of the team members.',aboutLabel:'01 / ABOUT ME',aboutTitle:'Yu Zhiyan. You can call me Nina.',aboutStatement:'Curiosity is\nmy gravity.',aboutText:'I like games, music and drawing. I also like asking: what would this tool or game look like if I made it?\n\nSo I started coding with AI, building learning apps, interactive websites and games of my own. A little idea, a little experiment, then another iteration.',tools:'The tools I work with',toolsText:'I use ChatGPT, Gemini and Claude to explore ideas and organize information, and Codex and Claude Code to write, debug and improve my projects.',interests:'Games, music & drawing',interestsText:'Games make me notice mechanics and feedback. Music inspired my rhythm game. Drawing makes me care about characters and how a world looks.',assistant:'What I hope to do as an assistant',assistantText:'Listen first, then try things together. I can help explore research, translation and vocabulary cards, or take the first steps toward building a website or app.',journeyLabel:'03 / BEYOND THE SCREEN',journeyTitle:'Step outside. Share the work.',journeyIntro:'Bringing a project into the real world means hearing new questions and discovering new possibilities.',conference:'2050 Conference',conferenceTag:'SHARING / LEARNING ASSISTANT',conferenceText:'I attended the 2050 Conference and shared my learning support app. It brings research, English-to-Chinese translation and vocabulary practice together, with less switching between tools.',videoCaption:'My 2050 Conference video · Play with sound using the controls',hackathon:'Glimmer Hackathon',hackathonTag:'COLLABORATION / STAR MAP FLEET',hackathonText:'With my teammates, I explored Star Map, an app that turns abstract social rules into visual cards to support autistic children in understanding emotions and everyday boundaries.',ongoing:'Keep making things',ongoingTag:'ONGOING / MAKING & LEARNING',ongoingText:'From an island adventure to a rhythm game; from daily words to an interactive city. I want to keep creating things I would love to use and play myself.',seeProject:'Explore this project',footerNote:'Based on my actual projects and creative records',menuTitle:'Choose a destination',menuLabel:'NINA / DIRECTORY',menuAbout:'Meet Nina, my tools and my interests.',menuWorks:'Eight apps, games and interactive websites.',menuJourney:'2050, a hackathon, and the next adventure.',rolePersonal:'Personal project · Built with AI',roleTeam:'Team project · Built with AI',noResults:'No projects in this category yet.',imageAlt:'Actual project screenshot',starPreviewTitle:'Make everyday rules visible.',starPreviewCopy:'Social rules · Emotions · Everyday routines',starPreviewNote:'Feature excerpt / Not a screenshot',vocabPreviewTitle:'analyze',vocabPreviewCopy:'Break information into parts to find patterns and causes.',vocabPreviewNote:'Vocabulary excerpt / Not a screenshot'}
+    };
+    const projects = [
+      {id:'learn',category:'apps',image:'assets/projects/learn.png',zh:{title:'Learn · 学习助手',tag:'学习工具 / 资料与词汇',description:'把查资料、英文翻译、单词卡和每日复习，放进同一个学习流程。',why:'查完英文资料，还要换一个 App 翻译、再整理生词，来回切换很麻烦。我想把这些步骤放在一起，也希望让资料更容易核对、减少错误信息。',features:['资料搜索与研究结果整理','英文资料翻译成中文','把生词整理成单词卡，安排每日复习','学习规划、专注计时与本地备份']},en:{title:'Learn · Learning Assistant',tag:'LEARNING / RESEARCH & VOCABULARY',description:'Research, translation, vocabulary cards and daily review in one learning workflow.',why:'Looking up English resources used to mean switching apps to translate and collect unfamiliar words. I wanted one place for the whole process, with information that is easier to check.',features:['Research and organized results','English-to-Chinese translation','Vocabulary cards and daily review','Learning plans, focus timer and local backups']},note:'prototypeNote'},
+      {id:'starmap',category:'apps',art:'starmap',team:true,zh:{title:'星图 App',tag:'无障碍 / 微光黑客松',description:'和队友一起，把抽象的社交规则变成更直观的图文卡片。',why:'有些孩子很难理解抽象的社交规则。我们希望用具体场景、图片和简短的语言，让规则更容易被理解和练习。',features:['把抽象概念拆成图文卡片与流程','用简单的表达认识和描述情绪','面向儿童与家长的不同使用界面','关注社交安全边界与日常隐私']},en:{title:'Star Map',tag:'ACCESSIBILITY / GLIMMER HACKATHON',description:'A team project turning abstract social rules into clearer visual cards.',why:'Abstract social rules can be difficult for some children to understand. We explored concrete scenarios, images and short sentences to make those rules easier to understand and practice.',features:['Visual cards and step-by-step routines','Simple ways to recognize and describe emotions','Separate experiences for children and parents','Social boundaries and everyday privacy']},note:'teamNote'},
+      {id:'lighthouse',category:'games',image:'assets/projects/lighthouse.png',zh:{title:'潮汐灯塔',tag:'3D 探索 / GODOT',description:'在自己的小海岛里游泳、钓鱼，等一次日落，再点亮灯塔。',why:'我喜欢能慢慢探索的游戏，也想做一个可以停下来看看海、听听音乐的小世界。',features:['四座海岛与可探索的灯塔','游泳、冲刺与岸边钓鱼','自动昼夜变化与环境配乐','收集、修复、手账和存档']},en:{title:'Tidal Lighthouse',tag:'3D EXPLORATION / GODOT',description:'Swim, fish, watch the sunset and bring a lighthouse back to life.',why:'I enjoy games that let you explore at your own pace. I wanted a small world where you can stop, look at the sea and listen to the music.',features:['Four islands and an explorable lighthouse','Swimming, dashing and shore fishing','Automatic day and night with ambient music','Collecting, repairs, a journal and saved progress']}},
+      {id:'rhythm',category:'games',image:'assets/projects/rhythm.png',zh:{title:'霓虹残响',tag:'2D 音游 / GODOT',description:'在霓虹城市中跟上节拍，在横版动作与六轨演奏之间切换。',why:'喜欢游戏，也喜欢音乐，所以想亲手做一个把动作、节奏和画面结合起来的音游。',features:['横版与 6K 段落自动切换','简单、普通、困难三档谱面','可以实际操作的六节新手教学','自定义昵称、改键与音频校准']},en:{title:'Neon Afterimage',tag:'2D RHYTHM GAME / GODOT',description:'Follow the beat through a neon city, switching between side-scrolling action and six lanes.',why:'I love both games and music, and wanted to make a rhythm game that brings action, timing and visuals together.',features:['Switching between side-scrolling and 6K sections','Easy, normal and hard charts','Six playable tutorial lessons','Player names, key mapping and audio calibration']}},
+      {id:'city',category:'web',image:'assets/projects/city.png',demo:'demos/city/index.html',zh:{title:'轨迹之城',tag:'互动创作 / 小红书黑客松项目',description:'随手画下一条线，让自己的轨迹长成一座城市。',why:'我想把随手涂鸦变成可以立即看见变化的创作，让每个人都能画出自己的城市。',features:['绘画轨迹驱动城市生成','可以不断尝试的即时视觉反馈','适配手机与电脑的交互','可直接打开的纯前端网页']},en:{title:'City of Traces',tag:'INTERACTIVE ART / HACKATHON PROJECT',description:'Draw a line and watch your own movement become a city.',why:'I wanted to turn a casual doodle into an immediate creative response, so anyone could draw a city of their own.',features:['A city generated from drawing gestures','Immediate visual feedback as you experiment','Phone and desktop interactions','A self-contained frontend experience']}},
+      {id:'history',category:'web',image:'assets/projects/history.png',demo:'demos/history/index.html',zh:{title:'古人朋友圈',tag:'历史探索 / 互动信息流',description:'如果古人也有朋友圈，历史会从谁的视角展开？',why:'我想用熟悉的信息流形式，让历史里不同人物的想法和处境更容易被看见。',features:['以信息流的方式探索历史','从不同人物视角理解事件','帖子与评论形式的互动阅读','无需登录的网页体验']},en:{title:'Ancient Friends Feed',tag:'HISTORY / INTERACTIVE FEED',description:'What would history look like if people from the past had a social feed?',why:'A familiar feed can make it easier to see how different people experienced the same moment in history.',features:['Explore history through a social-style feed','Different perspectives on historical events','Interactive reading through posts and comments','A web experience with no sign-in required']}},
+      {id:'persona',category:'web',image:'assets/projects/persona.png',demo:'demos/persona/index.html',zh:{title:'评论区人格测试',tag:'趣味测试 / 互动网页',description:'面对同一条帖子，你会怎么回复？看看你的评论区人格。',why:'同一个帖子可以有完全不同的回复。我想把这种有趣的差异，做成朋友之间能一起玩的小游戏。',features:['24 道题库，每局均衡抽取 12 题','12 种主人格与隐藏副人格','人格徽章、隐藏成就与收藏','可下载的结果分享卡与分享链接']},en:{title:'Comment Section Personality',tag:'PLAYFUL QUIZ / INTERACTIVE WEB',description:'The same post, a different reply. Discover your comment-section personality.',why:'People can respond to the same post in completely different ways. I turned those differences into a playful quiz to share with friends.',features:['12 balanced questions drawn from a pool of 24','12 personalities plus a hidden secondary type','Personality badges, achievements and collections','Downloadable result cards and shareable links']}},
+      {id:'vocab',category:'apps',art:'vocab',zh:{title:'逐页',tag:'MACOS 应用 / 每日英语',description:'每天五个词、一篇精读，把十分钟留给持续的进步。',why:'单词总是记不住，所以我想把每天的任务做小一点，让复习更容易坚持。',features:['每天五个高频学术词汇','例句、中文解释与填空练习','非虚构精读与推断题','错词记录、连续学习与每日提醒']},en:{title:'Page by Page',tag:'MACOS APP / DAILY ENGLISH',description:'Five words and a close reading. Ten minutes for a little progress, every day.',why:'Words do not always stick. I wanted a smaller daily task that makes consistent practice easier.',features:['Five high-frequency academic words each day','Examples, Chinese meanings and cloze practice','Nonfiction close reading and inference questions','Mistake tracking, streaks and daily reminders']}}
+    ];
+    const states = {
+      mars:{title:'NINA',planet:'MARS',next:'earth',panel:'about',zh:{name:'关于我',eyebrow:'AI 探索者 · 游戏创作者 · 学生',heading:'你好，我是余知宴。',intro:'也可以叫我 Nina。我用 AI 写代码，把学习中的小问题、脑海里的小游戏，变成可以使用的作品。',facts:[['创造','学习 App、游戏与互动网页'],['工具','ChatGPT / Gemini / Claude'],['代码','Codex / Claude Code']],action:'探索我的作品'},en:{name:'About me',eyebrow:'AI EXPLORER · GAME MAKER · STUDENT',heading:"Hi, I'm Yu Zhiyan. Call me Nina.",intro:'I code with AI, turning small learning problems and game ideas into things you can actually use and play.',facts:[['Making','Learning apps, games & interactive web'],['Thinking','ChatGPT / Gemini / Claude'],['Coding','Codex / Claude Code']],action:'Explore my work'}},
+      earth:{title:'WORKS',planet:'EARTH',next:'venus',panel:'works',zh:{name:'我的作品',eyebrow:'应用 · 游戏 · 互动实验',heading:'想到了，就试着做出来。',intro:'八个创作项目，来自真实的学习问题、游戏灵感和黑客松实验。每一个都留着我好奇心的轨迹。',facts:[['应用','学习助手 / 星图 / 逐页'],['游戏','潮汐灯塔 / 霓虹残响'],['网页','轨迹之城 / 古人朋友圈 / 人格测试']],action:'打开作品档案'},en:{name:'My works',eyebrow:'APPS · GAMES · INTERACTIVE EXPERIMENTS',heading:'A little idea. A real project.',intro:'Eight projects inspired by learning, games and hackathon experiments. Each carries a trace of my curiosity.',facts:[['Apps','Learn / Star Map / Page by Page'],['Games','Tidal Lighthouse / Neon Afterimage'],['Web','City of Traces / History / Personality']],action:'Open the project archive'}},
+      venus:{title:'JOURNEY',planet:'VENUS',next:'mars',panel:'journey',zh:{name:'我的经历',eyebrow:'分享 · 协作 · 持续探索',heading:'从屏幕里，走向真实世界。',intro:'在 2050 大会分享自己的学习 App，和黑客松队友一起做新尝试。作品，也是认识世界的方式。',facts:[['分享','2050 大会 · 学习助手'],['协作','微光黑客松 · 星图舰队'],['下一步','继续学习、创作，也分享经验']],action:'观看我的分享'},en:{name:'My journey',eyebrow:'SHARING · COLLABORATION · EXPLORATION',heading:'Beyond the screen.',intro:'Sharing my learning app at 2050. Building with hackathon teammates. Every project is another way to discover the world.',facts:[['Sharing','2050 Conference · Learning app'],['Together','Glimmer Hackathon · Star Map Fleet'],['Next','Keep learning, making and sharing']],action:'Watch my story'}}
+    };
+    let language = 'zh';
+    try { language = localStorage.getItem('nina-language') === 'en' ? 'en' : 'zh'; } catch {}
+    let current='mars', busy=false, activePanel=null, activeProject=null, filter='all', loaded=false;
+    const reducedQuery=matchMedia('(prefers-reduced-motion: reduce)');
+    let motionPaused=reducedQuery.matches, expansion=0, maskScale=0, canvasOpacity=1, transitionActive=false;
+    let rotX=0,rotY=0,targetX=0,targetY=0,lastFrame=0,frameId=0,frozen=false;
+    const experience=$('.experience'),canvas=$('#portal-canvas'),ctx=canvas.getContext('2d'),scene=$('#scene-canvas'),sceneCtx=scene.getContext('2d');
+    const portal=$('#portal'),portalVideo=$('#portal-video'),transitionVideo=$('#transition-video'),dialog=$('#dossier');
+    const cursor=$('.custom-cursor');let pointer={x:0,y:0},cursorPos={x:0,y:0};
+    const finePointer=matchMedia('(hover:hover) and (pointer:fine)').matches;
+    const t = key => copy[language][key] || key;
+    const escapeHTML = value => String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    const arrow='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5"/></svg>';
+    const external='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg>';
+    function translateDOM(){
+      document.documentElement.lang=language==='zh'?'zh-CN':'en';
+      document.title=language==='zh'?'Nina 余知宴 | 我的个人宇宙':'Nina Yu Zhiyan | My Little Universe';
+      $$('[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n);});
+      $$('[data-aria]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.aria)));
+      $$('[data-language]').forEach(el=>el.setAttribute('aria-label',language==='zh'?'Switch to English':'切换为中文'));
+      $$('[data-lang-label]').forEach(el=>el.classList.toggle('current',el.dataset.langLabel===language));
+      updateMotionButton();
+    }
+    function safePlay(video){if(motionPaused||document.hidden||dialog.open)return Promise.resolve();return video.play().catch(()=>{});}
+    function ready(mediaEl,timeout=1800){
+      if(mediaEl.readyState>=2)return Promise.resolve();
+      return new Promise(resolve=>{let timer;const done=()=>{clearTimeout(timer);mediaEl.removeEventListener('loadeddata',done);mediaEl.removeEventListener('error',done);resolve();};mediaEl.addEventListener('loadeddata',done,{once:true});mediaEl.addEventListener('error',done,{once:true});timer=setTimeout(done,timeout);});
+    }
+    function render(retrigger=true){
+      const state=states[current],data=state[language],next=states[state.next];
+      experience.dataset.planet=current;
+      $('#planet-title').textContent=state.title;$('#eyebrow').textContent=data.eyebrow;$('#info-title').textContent=data.heading;$('#info-intro').textContent=data.intro;
+      $('#facts').innerHTML=data.facts.map(([key,value])=>`<div class="fact"><dt>${escapeHTML(key)}</dt><dd>${escapeHTML(value)}</dd></div>`).join('');
+      $('#primary-action span').textContent=data.action;
+      $('#next-name').textContent=next[language].name;$('#next-number').textContent=`[0${Object.keys(states).indexOf(state.next)+1}]`;
+      portal.setAttribute('aria-label',`${language==='zh'?'进入':'Travel to'} ${next[language].name}`);
+      $('#location-name').textContent=state.planet;$('#orbit-index').textContent=`0${Object.keys(states).indexOf(current)+1}`;
+      $('.track').style.setProperty('--orbit-position',`${Object.keys(states).indexOf(current)*33.33}%`);
+      $('.planet-list').innerHTML=Object.entries(states).map(([id,s],i)=>`<button class="planet-item ${id===current?'active':''}" data-state="${id}" ${id===current?'aria-current="true"':''} aria-label="${escapeHTML(s[language].name)}"><span class="index">0${i+1}</span><span class="planet-label">${escapeHTML(s[language].name)}</span></button>`).join('');
+      if(retrigger){$('.planet-list').classList.remove('is-switching');void $('.planet-list').offsetWidth;$('.planet-list').classList.add('is-switching');}
+      $$('.nav [data-panel]').forEach(el=>el.classList.toggle('is-active',el.dataset.panel===state.panel));
+      $$('.background').forEach(video=>{const active=video.id===`${current}-background`;video.classList.toggle('is-visible',active);if(!active)video.pause();else if(current==='mars')safePlay(video);else if(video.readyState>=1){try{video.currentTime=Math.max(0,video.duration-.08);}catch{}}});
+      $('.backgrounds').style.backgroundImage=`url('assets/space/${current}.jpg')`;
+      const targetMedia=current==='venus'?media.intro:media[state.next];
+      if(portalVideo.getAttribute('src')!==targetMedia){portalVideo.src=targetMedia;portalVideo.load();}
+      portalVideo.loop=true;safePlay(portalVideo);
+      $$('[data-state]').forEach(el=>el.disabled=busy);
+    }
+    function animateValue(setter,duration){
+      if(motionPaused){setter(1);return Promise.resolve();}
+      return new Promise(resolve=>{const start=performance.now();function step(now){const progress=Math.min(1,(now-start)/duration);const ease=progress<.5?4*progress**3:1-(-2*progress+2)**3/2;setter(ease);if(progress<1)requestAnimationFrame(step);else resolve();}requestAnimationFrame(step);});
+    }
+    function revealContent(){experience.classList.remove('content-revealing');void experience.offsetWidth;experience.classList.add('content-revealing');}
+    async function revealMask(){maskScale=0;await animateValue(value=>maskScale=value,1000);}
+    function drawCover(context,source){
+      const mw=source.videoWidth||source.naturalWidth,mh=source.videoHeight||source.naturalHeight;
+      if(!mw||!mh)return false;
+      const scale=Math.max(innerWidth/mw,innerHeight/mh),w=mw*scale,h=mh*scale;
+      try{context.drawImage(source,(innerWidth-w)/2,(innerHeight-h)/2,w,h);return true;}catch{return false;}
+    }
+    function drawShade(context){const gradient=context.createLinearGradient(0,innerHeight*.52,0,innerHeight);gradient.addColorStop(0,'rgba(0,0,0,0)');gradient.addColorStop(1,'rgba(0,0,0,.88)');context.fillStyle=gradient;context.fillRect(0,innerHeight*.52,innerWidth,innerHeight*.48);}
+    const portalPosters={};for(const key of ['mars','earth','venus']){portalPosters[key]=new Image();portalPosters[key].src=`assets/space/${key}.jpg`;}
+    function resizeCanvas(){
+      const d=Math.min(devicePixelRatio||1,2);canvas.width=innerWidth*d;canvas.height=innerHeight*d;ctx.setTransform(d,0,0,d,0,0);
+      scene.width=innerWidth*d;scene.height=innerHeight*d;sceneCtx.setTransform(d,0,0,d,0,0);frozen=false;
+    }
+    // Sample a rounded rectangle, then project its points. The footage stays screen-locked.
+    function portalPath(cx,cy,w,h,r,rx,ry){
+      const ax=rx*Math.PI/180,ay=ry*Math.PI/180;ctx.beginPath();let first=true;
+      const corners=[[w/2-r,-h/2+r,-Math.PI/2,0],[w/2-r,h/2-r,0,Math.PI/2],[-w/2+r,h/2-r,Math.PI/2,Math.PI],[-w/2+r,-h/2+r,Math.PI,Math.PI*1.5]];
+      for(const [ox,oy,start,end] of corners)for(let i=0;i<=10;i++){const angle=start+(end-start)*i/10,x=ox+r*Math.cos(angle),y=oy+r*Math.sin(angle),xx=x*Math.cos(ay),yy=y*Math.cos(ax),z=x*Math.sin(ay)-y*Math.sin(ax),p=850/(850+z),sx=cx+xx*p,sy=cy+yy*p;if(first){ctx.moveTo(sx,sy);first=false;}else ctx.lineTo(sx,sy);}
+      ctx.closePath();
+    }
+    function draw(now){
+      frameId=requestAnimationFrame(draw);if(document.hidden||dialog.open){lastFrame=now;return;}
+      const dt=Math.min(40,now-(lastFrame||now));lastFrame=now;rotX+=(targetX-rotX)*Math.min(1,dt*.009);rotY+=(targetY-rotY)*Math.min(1,dt*.009);
+      ctx.clearRect(0,0,innerWidth,innerHeight);
+      if(frozen){ctx.drawImage(scene,0,0,innerWidth,innerHeight);drawShade(ctx);}
+      const rect=portal.getBoundingClientRect(),e=expansion,scale=e?1:maskScale,cx=rect.x+rect.width/2+(innerWidth/2-(rect.x+rect.width/2))*e,cy=rect.y+rect.height/2+(innerHeight/2-(rect.y+rect.height/2))*e,w=(rect.width+(innerWidth-rect.width)*e)*scale,h=(rect.height+(innerHeight-rect.height)*e)*scale;
+      if(w>1&&h>1){portalPath(cx,cy,w,h,Math.min(w/2,h/2,(innerWidth<601?52:84)*(1-e)*scale),rotX*(1-e),rotY*(1-e));ctx.save();ctx.globalAlpha=canvasOpacity;ctx.clip();ctx.fillStyle='#111613';ctx.fillRect(0,0,innerWidth,innerHeight);const source=transitionActive?transitionVideo:portalVideo;if(!drawCover(ctx,source))drawCover(ctx,portalPosters[states[current].next]);if(transitionActive)drawShade(ctx);ctx.restore();if(!busy){ctx.strokeStyle='rgba(255,255,255,.28)';ctx.lineWidth=.7;ctx.stroke();}}
+      if(finePointer&&!motionPaused){cursorPos.x+=(pointer.x-cursorPos.x)*.2;cursorPos.y+=(pointer.y-cursorPos.y)*.2;cursor.style.transform=`translate3d(${cursorPos.x}px,${cursorPos.y}px,0)`;}
+    }
+    async function travel(destination=states[current].next){
+      if(busy||destination===current||!loaded)return;
+      busy=true;targetX=targetY=0;experience.classList.add('is-loading');
+      $$('[data-state]').forEach(el=>el.disabled=true);portal.disabled=true;
+      try{
+        const src=destination==='mars'?media.intro:media[destination];transitionVideo.src=src;transitionVideo.load();
+        await ready(transitionVideo);experience.classList.remove('is-loading','content-revealing');experience.classList.add('is-transitioning');
+        const ended=new Promise(resolve=>{let timer;const done=()=>{clearTimeout(timer);transitionVideo.removeEventListener('ended',done);transitionVideo.removeEventListener('error',done);resolve();};transitionVideo.addEventListener('ended',done,{once:true});transitionVideo.addEventListener('error',done,{once:true});timer=setTimeout(done,motionPaused?0:5500);});
+        if(!motionPaused){transitionVideo.playbackRate=Math.min(4,Math.max(1.3,(transitionVideo.duration||4)/3));transitionActive=true;transitionVideo.play().catch(()=>{});}
+        await animateValue(value=>expansion=value,1050);if(!motionPaused)await ended;
+        frozen=false;if(transitionVideo.readyState>=2&&!motionPaused){sceneCtx.clearRect(0,0,innerWidth,innerHeight);frozen=drawCover(sceneCtx,transitionVideo);}
+        current=destination;render();await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+        transitionActive=false;expansion=0;maskScale=0;experience.classList.remove('is-transitioning');frozen=false;
+        revealContent();await revealMask();
+      }catch{current=destination;render();maskScale=1;revealContent();}
+      finally{busy=false;transitionActive=false;expansion=0;transitionVideo.pause();transitionVideo.removeAttribute('src');transitionVideo.load();experience.classList.remove('is-loading','is-transitioning');portal.disabled=false;$$('[data-state]').forEach(el=>el.disabled=false);}
+    }
+    async function runPreloader(){
+      const video=$('#preloader-video');let finished=false,start=performance.now(),percent=0;
+      const finish=async()=>{if(finished)return;finished=true;$('#preloader-value').textContent='100';$('#preloader-count').classList.add('is-leaving');$('#floating-logo').classList.add('is-docked');$('#preloader').classList.add('is-leaving');loaded=true;safePlay($('#mars-background'));await ready(portalVideo,1200);safePlay(portalVideo);revealContent();revealMask();setTimeout(()=>{$('#preloader').remove();$('#preloader-count').remove();video.pause();},800);setTimeout(()=>$('#floating-logo').remove(),1600);};
+      function progress(now){if(finished)return;const actual=video.duration?video.currentTime/video.duration*100:0;percent=Math.min(99,Math.max(percent,actual,(now-start)/45));$('#preloader-value').textContent=String(Math.round(percent));requestAnimationFrame(progress);}
+      requestAnimationFrame(progress);setTimeout(finish,motionPaused?350:4500);await ready(video,1500);
+      if(finished)return;if(motionPaused){finish();return;}
+      if(Number.isFinite(video.duration))video.playbackRate=Math.min(8,Math.max(.25,video.duration/3));
+      video.addEventListener('ended',finish,{once:true});video.addEventListener('error',finish,{once:true});video.play().catch(finish);
+    }
+    function artwork(project){
+      if(project.image)return `<img src="${project.image}" alt="${escapeHTML(project[language].title+' · '+t('imageAlt'))}" loading="lazy" width="1280" height="800">`;
+      if(project.art==='starmap')return `<div class="art-preview starmap"><div class="specimen"><small>STAR MAP / 星图</small><strong>${escapeHTML(t('starPreviewTitle'))}</strong><p>${escapeHTML(t('starPreviewCopy'))}</p><div class="emotion-list"><span>${language==='zh'?'开心':'Happy'}</span><span>${language==='zh'?'难过':'Sad'}</span><span>${language==='zh'?'困惑':'Confused'}</span></div></div><span class="preview-caption">${escapeHTML(t('starPreviewNote'))}</span></div>`;
+      return `<div class="art-preview"><div class="specimen"><small>PAGE BY PAGE / 逐页 · 01 OF 05</small><strong>analyze</strong><p>/ˈænəlaɪz/ · verb<br>${escapeHTML(t('vocabPreviewCopy'))}</p></div><span class="preview-caption">${escapeHTML(t('vocabPreviewNote'))}</span></div>`;
+    }
+    const bottom=()=>`<footer class="panel-bottom"><span>NINA · 余知宴</span><span>${escapeHTML(t('footerNote'))}</span></footer>`;
+    function renderWorks(){
+      const visible=projects.filter(p=>filter==='all'||p.category===filter);
+      return `<p class="section-label">${t('worksLabel')}</p><div class="panel-heading-row"><div><h2 class="panel-title" id="panel-title">${t('selectedWorks')}</h2><p class="panel-intro">${t('worksIntro')}</p></div><div class="project-count">08<small>${t('projects')}</small></div></div><div class="filters" role="group" aria-label="${language==='zh'?'作品分类':'Project categories'}">${['all','apps','games','web'].map(key=>`<button class="filter" data-filter="${key}" aria-pressed="${filter===key}">${t(key)}<small>${key==='all'?'08':`0${projects.filter(p=>p.category===key).length}`}</small></button>`).join('')}</div><div class="project-grid">${visible.map(p=>`<article class="project-card"><button class="project-image-button" data-project="${p.id}" aria-label="${escapeHTML(t('projectDetails')+': '+p[language].title)}">${artwork(p)}</button><div class="project-meta"><span>${escapeHTML(p[language].tag)}</span><span>${p.team?'COLLAB':'NINA'} / 0${projects.indexOf(p)+1}</span></div><div class="project-title-row"><h3>${escapeHTML(p[language].title)}</h3><button class="project-open" data-project="${p.id}" aria-label="${escapeHTML(t('projectDetails')+': '+p[language].title)}" title="${t('projectDetails')}">${external}</button></div><p>${escapeHTML(p[language].description)}</p></article>`).join('')}</div>${bottom()}`;
+    }
+    function renderProject(id){
+      const project=projects.find(p=>p.id===id),data=project[language];
+      return `<button class="back-link" data-panel="works"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m5-5-5 5 5 5"/></svg>${t('backWorks')}</button><p class="section-label">${escapeHTML(data.tag)}</p><h2 class="panel-title" id="panel-title">${escapeHTML(data.title)}</h2><p class="panel-intro">${escapeHTML(data.description)}</p><div class="detail-layout"><div class="detail-visual">${artwork(project)}<p class="video-caption">${project.image?t('imageAlt'):t('preview')}</p></div><div class="detail-copy"><h3>${t('motivation')}</h3><p>${escapeHTML(data.why)}</p><h3>${t('features')}</h3><ul class="feature-list">${data.features.map(f=>`<li>${escapeHTML(f)}</li>`).join('')}</ul><p class="detail-note">${t(project.team?'roleTeam':'rolePersonal')}</p>${project.note?`<p class="detail-note">${t(project.note)}</p>`:''}${project.demo?`<a class="action-link" href="${project.demo}" target="_blank" rel="noopener">${t('demo')}${external}</a><p class="detail-note">${t('demoNote')}</p>`:''}</div></div>${bottom()}`;
+    }
+    function renderAbout(){return `<p class="section-label">${t('aboutLabel')}</p><h2 class="panel-title" id="panel-title">${t('aboutTitle')}</h2><div class="about-layout"><div><h3 class="about-statement">${escapeHTML(t('aboutStatement')).replace(/\n/g,'<br>')}</h3><p class="about-paragraph">${escapeHTML(t('aboutText')).replace(/\n/g,'<br>')}</p><div class="interest-list"><span>${language==='zh'?'游戏':'Games'}</span><span>${language==='zh'?'音乐':'Music'}</span><span>${language==='zh'?'画画':'Drawing'}</span></div><button class="text-link" data-panel="works" style="margin-top:30px">${t('exploreWorks')}${arrow}</button></div><div><section class="about-section"><h3><span class="about-index">01</span>${t('tools')}</h3><div class="tool-list"><span>ChatGPT</span><span>Gemini</span><span>Claude</span><span>Codex</span><span>Claude Code</span></div><p style="margin-top:15px">${t('toolsText')}</p></section><section class="about-section"><h3><span class="about-index">02</span>${t('interests')}</h3><p>${t('interestsText')}</p></section><section class="about-section"><h3><span class="about-index">03</span>${t('assistant')}</h3><p>${t('assistantText')}</p></section></div></div>${bottom()}`;}
+    function renderJourney(){return `<p class="section-label">${t('journeyLabel')}</p><h2 class="panel-title" id="panel-title">${t('journeyTitle')}</h2><p class="panel-intro">${t('journeyIntro')}</p><div class="journey-layout"><div><video class="conference-video" controls playsinline preload="metadata" poster="assets/2050-poster.jpg" src="assets/nina-2050.mp4" aria-label="${t('videoCaption')}"></video><p class="video-caption">${t('videoCaption')}</p></div><div>${[['conference','conferenceTag','conferenceText','learn'],['hackathon','hackathonTag','hackathonText','starmap'],['ongoing','ongoingTag','ongoingText',null]].map(([title,tag,text,project])=>`<article class="timeline-item"><small>${t(tag)}</small><h3>${t(title)}</h3><p>${t(text)}</p>${project?`<button class="text-link" data-project="${project}">${t('seeProject')}${arrow}</button>`:`<button class="text-link" data-panel="works">${t('exploreWorks')}${arrow}</button>`}</article>`).join('')}</div></div>${bottom()}`;}
+    function renderMenu(){return `<p class="section-label">${t('menuLabel')}</p><h2 class="panel-title" id="panel-title">${t('menuTitle')}</h2><div style="margin-top:45px">${[['about','navAbout','menuAbout'],['works','navWorks','menuWorks'],['journey','navJourney','menuJourney']].map(([key,label,description],i)=>`<section class="about-section"><button class="text-link" data-panel="${key}" style="font-size:26px;border:0;padding:0;margin-bottom:12px"><span class="about-index">0${i+1}</span>${t(label)}${arrow}</button><p>${t(description)}</p></section>`).join('')}</div>${bottom()}`;}
+    function renderPanel(){const scrollTop=dialog.scrollTop;$('#panel-body').innerHTML=activeProject?renderProject(activeProject):activePanel==='works'?renderWorks():activePanel==='journey'?renderJourney():activePanel==='about'?renderAbout():renderMenu();dialog.scrollTop=scrollTop;}
+    let returnFocus=null;
+    function openPanel(panel,project=null){
+      activePanel=panel;activeProject=project;renderPanel();
+      if(!dialog.open){returnFocus=document.activeElement;dialog.showModal();$$('.experience video').forEach(v=>v.pause());}
+      dialog.scrollTop=0;$('#close-panel').focus();
+    }
+    function closePanel(){
+      $$('.conference-video').forEach(v=>v.pause());dialog.close();activePanel=null;activeProject=null;
+      if(!motionPaused){if(current==='mars')safePlay($('#mars-background'));safePlay(portalVideo);}
+      if(returnFocus?.isConnected)returnFocus.focus();
+    }
+    function updateMotionButton(){const button=$('#motion-toggle');button.setAttribute('aria-pressed',String(motionPaused));button.setAttribute('aria-label',t(motionPaused?'resumeMotion':'pauseMotion'));button.title=t(motionPaused?'resumeMotion':'pauseMotion');button.querySelector('span').textContent=t(motionPaused?'resumeMotion':'pauseMotion');button.querySelector('svg').innerHTML=motionPaused?'<path d="m5 3 7 5-7 5Z"/>':'<path d="M5 3v10M11 3v10"/>';if(motionPaused){cursor.classList.remove('is-visible');document.body.classList.remove('cursor-ready');}}
+    document.addEventListener('click',event=>{
+      const button=event.target.closest('button');if(!button)return;
+      if(button.hasAttribute('data-language')){language=language==='zh'?'en':'zh';try{localStorage.setItem('nina-language',language);}catch{}translateDOM();render(false);if(dialog.open)renderPanel();}
+      else if(button.dataset.panel)openPanel(button.dataset.panel);
+      else if(button.dataset.project)openPanel('works',button.dataset.project);
+      else if(button.dataset.filter){filter=button.dataset.filter;renderPanel();$(`[data-filter="${filter}"]`,dialog)?.focus();}
+      else if(button.dataset.state)travel(button.dataset.state);
+      else if(button.hasAttribute('data-home'))closePanel();
+    });
+    $('#close-panel').addEventListener('click',closePanel);
+    dialog.addEventListener('cancel',event=>{event.preventDefault();closePanel();});
+    portal.addEventListener('click',()=>travel());
+    $('#primary-action').addEventListener('click',()=>openPanel(current==='mars'?'works':states[current].panel));
+    $('#motion-toggle').addEventListener('click',()=>{motionPaused=!motionPaused;targetX=targetY=0;updateMotionButton();if(motionPaused)$$('.experience video').forEach(v=>v.pause());else{if(current==='mars')safePlay($('#mars-background'));safePlay(portalVideo);}});
+    document.addEventListener('pointermove',event=>{if(!finePointer||event.pointerType==='touch')return;pointer={x:event.clientX,y:event.clientY};if(!motionPaused&&loaded&&!dialog.open){cursor.classList.add('is-visible');document.body.classList.add('cursor-ready');}if(!busy&&!motionPaused){targetY=(event.clientX/innerWidth-.5)*37.4;targetX=(event.clientY/innerHeight-.5)*-33;}});
+    document.addEventListener('pointerleave',()=>{targetX=targetY=0;cursor.classList.remove('is-visible');document.body.classList.remove('cursor-ready');});
+    portal.addEventListener('pointerenter',()=>cursor.classList.add('is-enter'));portal.addEventListener('pointerleave',()=>cursor.classList.remove('is-enter'));
+    addEventListener('resize',resizeCanvas);
+    document.addEventListener('visibilitychange',()=>{if(document.hidden)$$('.experience video').forEach(v=>v.pause());else if(loaded&&!motionPaused&&!dialog.open){if(current==='mars')safePlay($('#mars-background'));safePlay(portalVideo);}});
+    reducedQuery.addEventListener('change',()=>{motionPaused=reducedQuery.matches;updateMotionButton();if(motionPaused)$$('.experience video').forEach(v=>v.pause());else{safePlay(portalVideo);if(current==='mars')safePlay($('#mars-background'));}});
+    $$('.background').forEach(video=>video.addEventListener('loadedmetadata',()=>{if(video.id!=='mars-background')try{video.currentTime=Math.max(0,video.duration-.08);}catch{}}));
+    for(const [id,url] of Object.entries(originalAssets)){$$(`video[src="${media[id]}"]`).forEach(video=>video.addEventListener('error',()=>{if(video.dataset.retried)return;video.dataset.retried='true';video.src=url;},{once:true}));}
+    resizeCanvas();translateDOM();render(false);requestAnimationFrame(draw);runPreloader();
+  })();
+  </script>
+  <script src="github-links.js" defer></script>
+</body>
+</html>
